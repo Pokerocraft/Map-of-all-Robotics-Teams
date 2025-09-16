@@ -1,52 +1,67 @@
 package org.example;
 
 
-import java.awt.*;
-import java.util.*;
-import java.util.List;
+import org.jxmapviewer.*;
+import org.jxmapviewer.google.GoogleMapsTileFactoryInfo;
+import org.jxmapviewer.input.PanMouseInputListener;
+import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
+import org.jxmapviewer.viewer.DefaultTileFactory;
+import org.jxmapviewer.viewer.GeoPosition;
+import org.jxmapviewer.viewer.TileFactory;
+import org.jxmapviewer.viewer.TileFactoryInfo;
+
 import javax.swing.*;
-import org.jxmapviewer.painter.Painter;
-import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.OSMTileFactoryInfo;
-import org.jxmapviewer.painter.CompoundPainter;
-import org.jxmapviewer.viewer.*;
+import javax.swing.event.MouseInputListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-
-public class Main{
-    public static void main(String[] args){
+/**
+ * The primary map viewer, called Main due to this being the main class
+ */
+public class Main {
+    public static void main(String[] args) {
         JXMapViewer mapViewer = new JXMapViewer();
-
-        JFrame frame = new JFrame("Map Viewer");
-        frame.getContentPane().add(mapViewer);
-        frame.setSize(800,600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
         mapViewer.setTileFactory(tileFactory);
 
-        GeoPosition wtc = new  GeoPosition(42.599467,-84.446544);
-        GeoPosition hhsnc = new  GeoPosition(42.641525,-84.573810);
+        String[] choices = {"Open Street Map","Virtual Earth","Hybrid Between Virtual Earth and Satellite","Satellite",};
+        JComboBox comboBox = new JComboBox(choices);
+        comboBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                TileFactoryInfo info;
+                int index = comboBox.getSelectedIndex();
+                if (index == 0) {
+                    info = new  OSMTileFactoryInfo();
+                } else if (index == 1) {
+                    info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
+                } else if (index == 2) {
+                    info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
+                } else {
+                    info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.SATELLITE);
+                }
+                DefaultTileFactory tileFactory = new DefaultTileFactory(info);
+                mapViewer.setTileFactory(tileFactory);
+                tileFactory.setThreadPoolSize(8);
+            }
+        });
 
-        List<GeoPosition> track = Arrays.asList(wtc, hhsnc);
-        CityHighlighter highlighter = new CityHighlighter(track);
+        GeoPosition wilsonTalentCenter = new GeoPosition(0, 0);
 
-        mapViewer.zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
+        mapViewer.setZoom(15);
+        mapViewer.setAddressLocation(wilsonTalentCenter);
 
-        Set<Waypoint> waypoints = new HashSet<Waypoint>(Arrays.asList(
-                new DefaultWaypoint(wtc),
-                new DefaultWaypoint(hhsnc)
-        ));
+        JFrame frame = new JFrame("A Map");
+        frame.getContentPane().add(mapViewer, BorderLayout.CENTER);
+        frame.getContentPane().add(comboBox, BorderLayout.NORTH);
+        frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 
-        WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
-        waypointPainter.setWaypoints(waypoints);
-
-        List<org.jxmapviewer.painter.Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
-        painters.add(highlighter);
-        painters.add(waypointPainter);
-
-        CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
-        mapViewer.setOverlayPainter(painter);
+        MouseInputListener mouseListener = new PanMouseInputListener(mapViewer);
+        mapViewer.addMouseListener(mouseListener);
+        mapViewer.addMouseMotionListener(mouseListener);
+        mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCenter(mapViewer));
     }
 }
