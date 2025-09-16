@@ -2,20 +2,14 @@ package org.example;
 
 
 import java.awt.*;
-import java.awt.image.ImageObserver;
-import java.text.AttributedCharacterIterator;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 import javax.swing.*;
-import org.jxmapviewer.JXMapKit;
+import org.jxmapviewer.painter.Painter;
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.OSMTileFactoryInfo;
-import org.jxmapviewer.google.GoogleMapsTileFactoryInfo;
 import org.jxmapviewer.painter.CompoundPainter;
-import org.jxmapviewer.viewer.DefaultTileFactory;
-import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.TileFactoryInfo;
+import org.jxmapviewer.viewer.*;
 
 
 public class Main{
@@ -35,7 +29,24 @@ public class Main{
         GeoPosition wtc = new  GeoPosition(42.599467,-84.446544);
         GeoPosition hhsnc = new  GeoPosition(42.641525,-84.573810);
 
-        List<GeoPosition> track = new Arrays.asList(wtc, hhsnc);
-        CityHighlighter highlighter = new CityHighlighter();
+        List<GeoPosition> track = Arrays.asList(wtc, hhsnc);
+        CityHighlighter highlighter = new CityHighlighter(track);
+
+        mapViewer.zoomToBestFit(new HashSet<GeoPosition>(track), 0.7);
+
+        Set<Waypoint> waypoints = new HashSet<Waypoint>(Arrays.asList(
+                new DefaultWaypoint(wtc),
+                new DefaultWaypoint(hhsnc)
+        ));
+
+        WaypointPainter<Waypoint> waypointPainter = new WaypointPainter<Waypoint>();
+        waypointPainter.setWaypoints(waypoints);
+
+        List<org.jxmapviewer.painter.Painter<JXMapViewer>> painters = new ArrayList<Painter<JXMapViewer>>();
+        painters.add(highlighter);
+        painters.add(waypointPainter);
+
+        CompoundPainter<JXMapViewer> painter = new CompoundPainter<JXMapViewer>(painters);
+        mapViewer.setOverlayPainter(painter);
     }
 }
