@@ -6,6 +6,7 @@ package org.example;
 import org.jxmapviewer.*;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
+import org.jxmapviewer.painter.CompoundPainter;
 import org.jxmapviewer.viewer.DefaultTileFactory;
 import org.jxmapviewer.viewer.GeoPosition;
 import org.jxmapviewer.viewer.TileFactoryInfo;
@@ -14,7 +15,6 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,16 +31,81 @@ public class Main {
 
 
         List<GeoPosition> holtPolygonPoints = Arrays.asList(
-                new GeoPosition(42.618476, -84.542689),
                 new GeoPosition(42.618399, -84.523146),
+                new GeoPosition(42.618476, -84.542689),
                 new GeoPosition(42.654777, -84.543040),
-                new GeoPosition(42.654653, -84.512546)
+                new GeoPosition(42.654653, -84.512546),
+                new GeoPosition(42.644223, -84.506112),
+                new GeoPosition(42.644444, -84.506061),
+                new GeoPosition(42.643937, -84.505734),
+                new GeoPosition(42.643874, -84.505827),
+                new GeoPosition(42.640210, -84.503708),
+                new GeoPosition(42.640204, - 84.504653),
+                new GeoPosition(42.640003, -84.504620),
+                new GeoPosition(42.639845, -84.504417),
+                new GeoPosition(42.639715, -84.504071),
+                new GeoPosition(42.638750, -84.503247),
+                new GeoPosition(42.638623, -84.503067),
+                new GeoPosition(42.638225, -84.502931),
+                new GeoPosition(42.637933, -84.502971),
+                new GeoPosition(42.637783, -84.503153),
+                new GeoPosition(42.637584, -84.503084),
+                new GeoPosition(42.637256, -84.502660),
+                new GeoPosition(42.636492, -84.501989),
+                new GeoPosition(42.635683, -84.501708),
+                new GeoPosition(42.634864, -84.501654),
+                new GeoPosition(42.634146, -84.502290),
+                new GeoPosition(42.633629, -84.502912),
+                new GeoPosition(42.633432, -84.503365),
+                new GeoPosition(42.633284, -84.503521),
+                new GeoPosition(42.633323, -84.503623),
+                new GeoPosition(42.633349, -84.504154),
+                new GeoPosition(42.633122, -84.504465),
+                new GeoPosition(42.633059, -84.504653),
+                new GeoPosition(42.632652, -84.504835),
+                new GeoPosition(42.632301, -84.504854),
+                new GeoPosition(42.631881, -84.504677),
+                new GeoPosition(42.631543, -84.504564),
+                new GeoPosition(42.631125, -84.504341),
+                new GeoPosition(42.630699, -84.504277),
+                new GeoPosition(42.629996, -84.504309),
+                new GeoPosition(42.629641, -84.504277),
+                new GeoPosition(42.628988, -84.503845),
+                new GeoPosition(42.628974, -84.503843),
+                new GeoPosition(42.628745, -84.503797),
+                new GeoPosition(42.626704, -84.505430),
+                new GeoPosition(42.626207, -84.506061),
+                new GeoPosition(42.625386, -84.508778),
+                new GeoPosition(42.625029, -84.509518),
+                new GeoPosition(42.624934, -84.510194),
+                new GeoPosition(42.624753, -84.510712),
+                new GeoPosition(42.624607, -84.511506),
+                new GeoPosition(42.624437, -84.512037),
+                new GeoPosition(42.624384, -84.512415),
+                new GeoPosition(42.624374, -84.512482),
+                new GeoPosition(42.624297, -84.512726),
+                new GeoPosition(42.624245, -84.513252),
+                new GeoPosition(42.624382, -84.514397),
+                new GeoPosition(42.624530, -84.516585),
+                new GeoPosition(42.624753, -84.518141),
+                new GeoPosition(42.624774, -84.518485),
+                new GeoPosition(42.624855, -84.519021),
+                new GeoPosition(42.624999, -84.519579),
+                new GeoPosition(42.625055, -84.520503),
+                new GeoPosition(42.625013, -84.521352),
+                new GeoPosition(42.625080, -84.523203),
+                new GeoPosition(42.618399, -84.523146)
         );
 
+
+
         PolygonalPainter polygonalPainter = new PolygonalPainter(
-                holtPolygonPoints,
-                new Color(132, 94, 57, )
-        )
+                holtPolygonPoints, new Color(132, 94, 57, 255), new Color(132, 94, 58, 150));
+
+        CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter<JXMapViewer>();
+        compoundPainter.setPainters(polygonalPainter);
+
+
 
         //Options for the map
         String[] choices = {"Open Street Map","Virtual Earth","Hybrid Between Virtual Earth and Satellite","Satellite",};
@@ -64,9 +129,11 @@ public class Main {
             }
         });
 
-        GeoPosition wilsonTalentCenter = new GeoPosition(0, 0);
+
+        mapViewer.setOverlayPainter(compoundPainter);
+        GeoPosition wilsonTalentCenter = new GeoPosition(42.640123, -84.523664);
         //Setting the Zoom and address to WTC
-        mapViewer.setZoom(15);
+        mapViewer.setZoom(5);
         mapViewer.setAddressLocation(wilsonTalentCenter);
         //Frame
         JFrame frame = new JFrame("A Map");
@@ -82,62 +149,3 @@ public class Main {
         mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCenter(mapViewer));
     }
 }
-
-/*import org.jxmapviewer.JXMapViewer;
-import org.jxmapviewer.painter.CompoundPainter;
-import org.jxmapviewer.viewer.DefaultTileFactory;
-import org.jxmapviewer.viewer.GeoPosition;
-import org.jxmapviewer.viewer.TileFactoryInfo;
-import org.jxmapviewer.viewer.wms.WMSTileFactoryInfo;
-import javax.swing.JFrame;
-import java.awt.Color;
-import java.util.Arrays;
-import java.util.List;
-
-public class JXMapViewerPolygonExample {
-    public static void main(String[] args) {
-        // Create the map viewer
-        JXMapViewer mapViewer = new JXMapViewer();
-
-        // Create a TileFactoryInfo for OpenStreetMap
-        TileFactoryInfo info = new WMSTileFactoryInfo(
-                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                null,
-                "OpenStreetMap",
-                "1.1.1");
-        mapViewer.setTileFactory(new DefaultTileFactory(info));
-
-        // Define the vertices of your polygon using GeoPosition
-        List<GeoPosition> polygonPoints = Arrays.asList(
-            new GeoPosition(48.8584, 2.2945), // Eiffel Tower
-            new GeoPosition(48.8606, 2.3376), // The Louvre
-            new GeoPosition(48.8738, 2.2950), // Arc de Triomphe
-            new GeoPosition(48.8500, 2.3800)  // A point near Père Lachaise
-        );
-
-        // Create the custom polygon painter
-        PolygonPainter polygonPainter = new PolygonPainter(
-            polygonPoints,
-            new Color(150, 200, 255, 100), // Semi-transparent blue fill
-            new Color(50, 100, 200, 255)  // Opaque blue border
-        );
-
-        // Create a compound painter and add the polygon painter
-        CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter<>();
-        compoundPainter.setPainters(polygonPainter);
-
-        // Set the compound painter to the map viewer
-        mapViewer.setOverlayPainter(compoundPainter);
-
-        // Set the map center and zoom level to display the polygon
-        mapViewer.setCenterPosition(new GeoPosition(48.865, 2.33));
-        mapViewer.setZoom(5);
-
-        // Set up the Swing frame
-        JFrame frame = new JFrame("JXMapViewer2 Polygon Example");
-        frame.getContentPane().add(mapViewer);
-        frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-    }
-}*/
