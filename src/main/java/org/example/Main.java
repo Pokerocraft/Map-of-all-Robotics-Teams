@@ -15,6 +15,7 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -97,13 +98,17 @@ public class Main {
                 new GeoPosition(42.618399, -84.523146)
         );
 
+        List<GeoPosition> masonPolygonPoints;
 
 
-        PolygonalPainter polygonalPainter = new PolygonalPainter(
+
+        PolygonalPainter holtPolygonalPainter = new PolygonalPainter(
                 holtPolygonPoints, new Color(132, 94, 57, 255), new Color(132, 94, 58, 150));
-
+//        PolygonalPainter masonPolygonPainter = new PolygonalPainter(
+//                masonPolygonPoints, new Color(0,179,2, 255), new Color(0,179,2, 255)
+//        );
         CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter<JXMapViewer>();
-        compoundPainter.setPainters(polygonalPainter);
+//        compoundPainter.setPainters(holtPolygonalPainter,  masonPolygonPainter);
 
 
 

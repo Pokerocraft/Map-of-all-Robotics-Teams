@@ -34,7 +34,7 @@ public class PolygonalPainter extends AbstractPainter<JXMapViewer>{
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // do the drawing
-        g.setColor(strokeColor);
+        g.setColor(strokeColor); // Line Color
         g.setStroke(new BasicStroke(4));
 
         drawRoute(g, map);
