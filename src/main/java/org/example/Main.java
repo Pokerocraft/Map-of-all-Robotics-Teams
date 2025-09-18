@@ -15,100 +15,41 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+import com.google.gson.*;
 
 /**
  * The primary map viewer, called Main due to this being the main class
  */
 @SuppressWarnings("ALL")
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         JXMapViewer mapViewer = new JXMapViewer();
         TileFactoryInfo info = new OSMTileFactoryInfo();
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
         mapViewer.setTileFactory(tileFactory);
 
 
-        List<GeoPosition> holtPolygonPoints = Arrays.asList(
-                new GeoPosition(42.618399, -84.523146),
-                new GeoPosition(42.618476, -84.542689),
-                new GeoPosition(42.654777, -84.543040),
-                new GeoPosition(42.654653, -84.512546),
-                new GeoPosition(42.644223, -84.506112),
-                new GeoPosition(42.644444, -84.506061),
-                new GeoPosition(42.643937, -84.505734),
-                new GeoPosition(42.643874, -84.505827),
-                new GeoPosition(42.640210, -84.503708),
-                new GeoPosition(42.640204, - 84.504653),
-                new GeoPosition(42.640003, -84.504620),
-                new GeoPosition(42.639845, -84.504417),
-                new GeoPosition(42.639715, -84.504071),
-                new GeoPosition(42.638750, -84.503247),
-                new GeoPosition(42.638623, -84.503067),
-                new GeoPosition(42.638225, -84.502931),
-                new GeoPosition(42.637933, -84.502971),
-                new GeoPosition(42.637783, -84.503153),
-                new GeoPosition(42.637584, -84.503084),
-                new GeoPosition(42.637256, -84.502660),
-                new GeoPosition(42.636492, -84.501989),
-                new GeoPosition(42.635683, -84.501708),
-                new GeoPosition(42.634864, -84.501654),
-                new GeoPosition(42.634146, -84.502290),
-                new GeoPosition(42.633629, -84.502912),
-                new GeoPosition(42.633432, -84.503365),
-                new GeoPosition(42.633284, -84.503521),
-                new GeoPosition(42.633323, -84.503623),
-                new GeoPosition(42.633349, -84.504154),
-                new GeoPosition(42.633122, -84.504465),
-                new GeoPosition(42.633059, -84.504653),
-                new GeoPosition(42.632652, -84.504835),
-                new GeoPosition(42.632301, -84.504854),
-                new GeoPosition(42.631881, -84.504677),
-                new GeoPosition(42.631543, -84.504564),
-                new GeoPosition(42.631125, -84.504341),
-                new GeoPosition(42.630699, -84.504277),
-                new GeoPosition(42.629996, -84.504309),
-                new GeoPosition(42.629641, -84.504277),
-                new GeoPosition(42.628988, -84.503845),
-                new GeoPosition(42.628974, -84.503843),
-                new GeoPosition(42.628745, -84.503797),
-                new GeoPosition(42.626704, -84.505430),
-                new GeoPosition(42.626207, -84.506061),
-                new GeoPosition(42.625386, -84.508778),
-                new GeoPosition(42.625029, -84.509518),
-                new GeoPosition(42.624934, -84.510194),
-                new GeoPosition(42.624753, -84.510712),
-                new GeoPosition(42.624607, -84.511506),
-                new GeoPosition(42.624437, -84.512037),
-                new GeoPosition(42.624384, -84.512415),
-                new GeoPosition(42.624374, -84.512482),
-                new GeoPosition(42.624297, -84.512726),
-                new GeoPosition(42.624245, -84.513252),
-                new GeoPosition(42.624382, -84.514397),
-                new GeoPosition(42.624530, -84.516585),
-                new GeoPosition(42.624753, -84.518141),
-                new GeoPosition(42.624774, -84.518485),
-                new GeoPosition(42.624855, -84.519021),
-                new GeoPosition(42.624999, -84.519579),
-                new GeoPosition(42.625055, -84.520503),
-                new GeoPosition(42.625013, -84.521352),
-                new GeoPosition(42.625080, -84.523203),
-                new GeoPosition(42.618399, -84.523146)
-        );
-
-        List<GeoPosition> masonPolygonPoints;
+        List<GeoPosition> holtPolygonPoints = parseGeoJsonFile(new File("src/main/geojsons/holtMichigan.geojson"));
+        List<GeoPosition> masonPolygonPoints = parseGeoJsonFile(new File("src/main/geojsons/masonMichigan.geojson"));
 
 
 
         PolygonalPainter holtPolygonalPainter = new PolygonalPainter(
                 holtPolygonPoints, new Color(132, 94, 57, 255), new Color(132, 94, 58, 150));
-//        PolygonalPainter masonPolygonPainter = new PolygonalPainter(
-//                masonPolygonPoints, new Color(0,179,2, 255), new Color(0,179,2, 255)
-//        );
+        PolygonalPainter masonPolygonPainter = new PolygonalPainter(
+                masonPolygonPoints, new Color(0,179,2, 255), new Color(0,179,2, 255)
+        );
         CompoundPainter<JXMapViewer> compoundPainter = new CompoundPainter<JXMapViewer>();
-//        compoundPainter.setPainters(holtPolygonalPainter,  masonPolygonPainter);
+        compoundPainter.setPainters(holtPolygonalPainter,  masonPolygonPainter);
 
 
 
@@ -152,5 +93,29 @@ public class Main {
         mapViewer.addMouseListener(mouseListener);
         mapViewer.addMouseMotionListener(mouseListener);
         mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCenter(mapViewer));
+    }
+
+    /**
+     * Parses the GeoJSON files so that the map highlights the location, make sure to make these [[[[ ]]]] into these [[ ]]
+     * @param file the location of the file, primarily src/main/geojsons/cityState.geojson
+     * @throws FileNotFoundException In the event there is no file there
+     */
+    static List<GeoPosition> parseGeoJsonFile(File file) throws FileNotFoundException {
+        ArrayList<GeoPosition> list = new ArrayList<GeoPosition>();
+        Scanner scanner = new Scanner(file);
+        String geoJsonString = scanner.nextLine();
+        Gson gson = new Gson();
+        GeoJSON geoJSON = gson.fromJson(geoJsonString, GeoJSON.class);
+        if (geoJSON != null) {
+            List<List<Double>> coordinates = geoJSON.getCoordinates();
+            System.out.println("Coordinates");
+            for (List<Double> coordinate : coordinates) {
+                for (Double place:  coordinate) {
+                    list.add(new GeoPosition(coordinate.get(1), coordinate.get(0)));
+                    System.out.println("Longitude: " + coordinate.get(0) + " Latitude: " + coordinate.get(1));
+                }
+            }
+        }
+        return list;
     }
 }
