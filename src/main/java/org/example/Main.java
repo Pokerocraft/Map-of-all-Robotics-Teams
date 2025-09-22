@@ -15,11 +15,14 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
 
 import com.google.gson.*;
 
@@ -28,13 +31,26 @@ import com.google.gson.*;
  */
 @SuppressWarnings("ALL")
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, URISyntaxException {
         JXMapViewer mapViewer = new JXMapViewer();
-        TileFactoryInfo info = new OSMTileFactoryInfo();
+        TileFactoryInfo info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
         mapViewer.setTileFactory(tileFactory);
         Color deepGreen = new Color(0,105,30);
+        URI uri = new URI("https://www.thebluealliance.com/");
+        Desktop desktop = Desktop.getDesktop();
 
+        mapViewer.setLayout(null);
+        //Centers
+        GeoPosition holtMichiganUsa = new  GeoPosition(42.640176,-84.523455);
+
+
+        ButtonWaypoint holtMichiganUsaButton = new ButtonWaypoint("RoboRams", holtMichiganUsa, 6078);
+
+        Set<ButtonWaypoint> buttonWaypoints = new HashSet<>();
+        buttonWaypoints.add(holtMichiganUsaButton);
+        ButtonWaypointRenderer renderer = new ButtonWaypointRenderer(mapViewer);
+        renderer.setWaypoints(buttonWaypoints);
 
         List<GeoPosition> holtMichiganUsaPPoints = parseGeoJsonFile(new File("src/main/geojsons/USA/Michigan/holt.geojson"));
         List<GeoPosition> masonMichiganUsaPPoints = parseGeoJsonFile(new File("src/main/geojsons/USA/Michigan/mason.geojson"));
@@ -52,7 +68,6 @@ public class Main {
         List<GeoPosition> hamtramckMichiganUsaPPoints = parseGeoJsonFile(new File("src/main/geojsons/USA/Michigan/hamtramck.geojson"));
         List<GeoPosition> rochesterMichiganUsaPPoints = parseGeoJsonFile(new File("src/main/geojsons/USA/Michigan/rochester.geojson"));
         List<GeoPosition> grandvilleMichiganUsaPPoints = parseGeoJsonFile(new File("src/main/geojsons/USA/Michigan/grandville.geojson"));
-
 
 
 
@@ -112,21 +127,24 @@ public class Main {
         compoundPainter.setPainters(holtMichiganUsaPPainter,  masonMichiganUsaPPainter,  lansingMichiganUsaPPainter, pontiacMichiganUsaPPainter,
         clarkstonMichiganUsaPPainter,  bloomfieldHillsMichiganUsaPPainter, ypsilantiMichiganUsaPPainter,  highlandTownshipMichiganUsaPPainter,
         ortonvilleMichiganUsaPPainter, goodrichMichiganUsaPPainter, hollandMichiganUsaPPainter, zeelandMichiganUsaPPainter, southfieldMichiganUsaPPainter,
-        hamtramckMichiganUsaPPainter, rochesterMichiganUsaPPainter, grandvilleMichiganUsaPPainter);
+        hamtramckMichiganUsaPPainter, rochesterMichiganUsaPPainter, grandvilleMichiganUsaPPainter, renderer);
 
-
+        JTextPane textPane = new JTextPane();
+        textPane.setText("It appears that AbstractTileFactory is experiencing some sort of bug, so the default until that is fixed is Virtual Earth instead of Open Street Map");
+        textPane.setEditable(false);
 
         //Options for the map
-        String[] choices = {"Open Street Map","Virtual Earth","Hybrid Between Virtual Earth and Satellite","Satellite",};
+        String[] choices = {"Virtual Earth","Open Street Map (Bugged)","Hybrid Between Virtual Earth and Satellite","Satellite",};
         JComboBox comboBox = new JComboBox(choices);
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 TileFactoryInfo info;
                 int index = comboBox.getSelectedIndex();
                 if (index == 0) {
-                    info = new  OSMTileFactoryInfo();
-                } else if (index == 1) {
                     info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
+                } else if (index == 1) {
+
+                    info = new  OSMTileFactoryInfo();
                 } else if (index == 2) {
                     info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
                 } else {
@@ -137,7 +155,16 @@ public class Main {
                 tileFactory.setThreadPoolSize(8);
             }
         });
-
+        JButton linkedButton = new JButton("Go to The Blue Alliance");
+        linkedButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    desktop.browse(uri);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         mapViewer.setOverlayPainter(compoundPainter);
         GeoPosition wilsonTalentCenter = new GeoPosition(42.640123, -84.523664);
@@ -148,6 +175,8 @@ public class Main {
         JFrame frame = new JFrame("A Map");
         frame.getContentPane().add(mapViewer, BorderLayout.CENTER);
         frame.getContentPane().add(comboBox, BorderLayout.NORTH);
+        frame.getContentPane().add(textPane, BorderLayout.SOUTH);
+        frame.getContentPane().add(linkedButton, BorderLayout.EAST);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);

@@ -78,6 +78,11 @@ public class PolygonalPainter extends AbstractPainter<JXMapViewer>{
         for (GeoPosition gp : polygonPoints)
         {
             // convert geo-coordinate to world bitmap pixel
+//            if (gp.getLatitude() == 42.5965663 &&  gp.getLongitude() == -84.4627662){
+//                if (map.getZoom() == 1){
+//                    System.out.println("Should be something here");
+//                }
+//            }
             Point2D pt = map.getTileFactory().geoToPixel(gp, map.getZoom());
 
             if (first)
