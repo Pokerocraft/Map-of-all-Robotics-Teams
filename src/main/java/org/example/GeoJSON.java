@@ -10,7 +10,7 @@ public class GeoJSON {
     private List<List<Double>> coordinates;
 
     /**
-     * Deprecated. There really is no point in this method.
+     * @deprecated Unused Method
      * Pretty much just returns the type of shape the GeoJSON has, majority of the time it's MultiPolygon.
      * @return Returns the type of polygon used, this method is not used at all
      */
@@ -19,7 +19,7 @@ public class GeoJSON {
     }
 
     /**
-     * Unused. Sets the type of polygon used
+     * @deprecated This method is never used
      * @param type The type of polygon used
      */
     public void setType(String type) {

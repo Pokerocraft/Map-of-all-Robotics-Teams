@@ -8,13 +8,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
+/**
+ * An extension of {@link WaypointPainter} to render {@link ButtonWaypoint buttons that act as waypoints}
+ */
 public class ButtonWaypointRenderer extends WaypointPainter<ButtonWaypoint> {
     private final JXMapViewer map;
 
+    /**
+     * Constructor for {@link ButtonWaypointRenderer}
+     * @param map Pretty Much a thing for the map so that the buttons render correctly on screen
+     */
     public ButtonWaypointRenderer(JXMapViewer map) {
         this.map = map;
     }
 
+    /**
+     * Paints out all the buttons so that they show up on the map with their text
+     * @param g Some kind of {@link Graphics2D}, I believe it's used to make the buttons render
+     * @param map The map, that's usually called from the constructor
+     * @param w Width
+     * @param h Height
+     */
     @Override
     protected void doPaint(Graphics2D g, JXMapViewer map, int w, int h){
         Rectangle viewportBounds = map.getViewportBounds();
