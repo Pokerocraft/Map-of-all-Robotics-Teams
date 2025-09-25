@@ -1,6 +1,6 @@
 package org.example;
-//Yeah, for whatever reason, jxmapviewer2 doesn't have any documentation in code, so you'll have to likely check
-// https://javadoc.io/doc/org.jxmapviewer/jxmapviewer2/latest/index.html
+/*Yeah, for whatever reason, jxmapviewer2 doesn't have any documentation in code, so you'll have to likely check
+https://javadoc.io/doc/org.jxmapviewer/jxmapviewer2/latest/index.html for any documentation with jxmapviewer2's code*/
 import org.jxmapviewer.*;
 import org.jxmapviewer.input.PanMouseInputListener;
 import org.jxmapviewer.input.ZoomMouseWheelListenerCenter;
@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -37,41 +38,38 @@ public class Main {
     static Set<ButtonWaypoint> buttonWaypoints = new HashSet<>();
     static ButtonWaypointRenderer renderer = new ButtonWaypointRenderer(mapViewer);
 
+    /**
+     * The Primary thing making this run
+     * @param args
+     * @throws FileNotFoundException
+     * @throws URISyntaxException
+     */
     public static void main(String[] args) throws FileNotFoundException, URISyntaxException {
 
         TileFactoryInfo info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
         DefaultTileFactory tileFactory = new DefaultTileFactory(info);
         mapViewer.setTileFactory(tileFactory);
-        Color deepGreen = new Color(0, 105, 30);
-        URI uri = new URI("https://www.thebluealliance.com/");
-        Desktop desktop = Desktop.getDesktop();
+//        Color deepGreen = new Color(0, 105, 30);
+//        URI uri = new URI("https://www.thebluealliance.com/");
+//        Desktop desktop = Desktop.getDesktop();
 
         mapViewer.setLayout(null);
         //Centers
-        GeoPosition holtMichiganUsa = new GeoPosition(42.640176, -84.523455);
-        GeoPosition masonMichiganUsa = new GeoPosition(42.579713, -84.442283);
-        GeoPosition masonMichiganUsa2 = new GeoPosition(42.578682, -84.442278);
-        GeoPosition newportMichiganUsa = new GeoPosition(42.0022672, -83.3085419);
-
-        //Multitudes of ButtonWaypoints
-        ButtonWaypoint holtMichiganUsaButton = new ButtonWaypoint("RoboRams", holtMichiganUsa, 6078);
-        ButtonWaypoint masonMichiganUsaButton = new ButtonWaypoint("Tractor Technicians", masonMichiganUsa, 3655);
-        ButtonWaypoint masonMichiganUsaButton2 = new ButtonWaypoint("Tractor Technicians Next Gen", masonMichiganUsa2, 8424);
-        ButtonWaypoint newportMichiganUsaButton = new ButtonWaypoint("TEMPEST", newportMichiganUsa, 240);
+        List<ButtonWaypoint> buttons = processJsonFolder("src/main/frcData/USA/Michigan");
 
         //This'll be even longer
-        buttonWaypoints = Set.of(holtMichiganUsaButton, masonMichiganUsaButton, masonMichiganUsaButton2, newportMichiganUsaButton);
+        buttonWaypoints = Set.of(buttons.toArray(new ButtonWaypoint[buttons.size()]));
 
         renderer.setWaypoints(buttonWaypoints);
 
         List<List<GeoPosition>> michiganUsaCitiesPolygonPoints = processGeoJsonFolder("src/main/geojsons/USA/Michigan");
         System.out.println(michiganUsaCitiesPolygonPoints.size());
-        List<PolygonalPainter> painters = createNewPainter(michiganUsaCitiesPolygonPoints);
-        System.out.println(painters.size());
+        List<PolygonalPainter> michiganUsaPainters = createNewPainter(michiganUsaCitiesPolygonPoints);
+        System.out.println(michiganUsaPainters.size());
 
 
         //Creates a Compound Painter that utilizes JXMapViewer
-        CompoundPainter<JXMapViewer> compoundPainter = createCompoundPainter(painters, renderer);
+        CompoundPainter<JXMapViewer> compoundPainter = createCompoundPainter(michiganUsaPainters, renderer);
         mapViewer.setOverlayPainter(compoundPainter);
 
         JTextPane textPane = new JTextPane();
@@ -100,16 +98,16 @@ public class Main {
                 tileFactory.setThreadPoolSize(8);
             }
         });
-        JButton linkedButton = new JButton("Go to The Blue Alliance");
-        linkedButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    desktop.browse(uri);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
+//        JButton linkedButton = new JButton("Go to The Blue Alliance");
+//        linkedButton.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                try {
+//                    desktop.browse(uri);
+//                } catch (IOException ex) {
+//                    throw new RuntimeException(ex);
+//                }
+//            }
+//        });
 
 
         GeoPosition wilsonTalentCenter = new GeoPosition(42.640123, -84.523664);
@@ -121,7 +119,7 @@ public class Main {
         frame.getContentPane().add(mapViewer, BorderLayout.CENTER);
         frame.getContentPane().add(comboBox, BorderLayout.NORTH);
         frame.getContentPane().add(textPane, BorderLayout.SOUTH);
-        frame.getContentPane().add(linkedButton, BorderLayout.EAST);
+//        frame.getContentPane().add(linkedButton, BorderLayout.EAST);
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -209,5 +207,57 @@ public class Main {
         painters.addAll(polygonPainters);
         painters.add(renderer);
         return new CompoundPainter<JXMapViewer>(painters);
+    }
+
+    /**
+     * Parses JSON files so that way I don't have to get an API key that complicates things.
+     * @param file
+     * @return
+     * @throws FileNotFoundException
+     */
+    static ButtonWaypoint parseJsonFile(File file) throws FileNotFoundException {
+        Scanner scanner = new Scanner(file);
+        String jsonString = scanner.nextLine();
+        ButtonWaypoint waypoint = null;
+        Gson gson = new Gson();
+        try{
+            JSON json = gson.fromJson(jsonString, JSON.class);
+            if (json != null) {
+                int teamNumber = json.getTeamNumber();
+                String name = json.getTeamName();
+                List<Double> coordinates = json.getCoordinates();
+                //System.out.println(coordinates);
+                GeoPosition geoPosition = new GeoPosition(coordinates.get(0), coordinates.get(1));
+                waypoint = new ButtonWaypoint(name, geoPosition, teamNumber);
+            }
+        } catch (Exception e){
+            System.err.println("Welp, some error happened");
+            System.exit(-1);
+        }
+        return waypoint;
+    }
+
+    /**
+     * Processes an entire folder worth of JSON files
+     * @param directoryPath The path to the folder
+     * @return Returns a list of {@link ButtonWaypoint Button Waypoints}
+     */
+    static List<ButtonWaypoint> processJsonFolder(String directoryPath) {
+        Path startPath = Paths.get(directoryPath);
+        List<ButtonWaypoint> list = new ArrayList<>();
+
+        try(Stream<Path> paths = Files.walk(startPath)) {
+            paths.filter(Files::isRegularFile).filter(path -> path.toString().endsWith(".json")).forEach(path -> {
+                try {
+                    ButtonWaypoint waypoint = parseJsonFile(path.toFile());
+                    list.add(waypoint);
+                } catch (FileNotFoundException e){
+                    System.err.println("Oh no 😢");
+                }
+            });
+        } catch (IOException e) {
+            System.err.println("Oh no 😢");
+        }
+        return list;
     }
 }
