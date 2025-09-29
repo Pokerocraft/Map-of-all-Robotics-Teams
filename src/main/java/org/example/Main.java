@@ -63,9 +63,9 @@ public class Main {
         renderer.setWaypoints(buttonWaypoints);
 
         List<List<GeoPosition>> michiganUsaCitiesPolygonPoints = processGeoJsonFolder("src/main/geojsons/USA/Michigan");
-        System.out.println(michiganUsaCitiesPolygonPoints.size());
+        //System.out.println(michiganUsaCitiesPolygonPoints.size());
         List<PolygonalPainter> michiganUsaPainters = createNewPainter(michiganUsaCitiesPolygonPoints);
-        System.out.println(michiganUsaPainters.size());
+        //System.out.println(michiganUsaPainters.size());
 
 
         //Creates a Compound Painter that utilizes JXMapViewer
@@ -73,11 +73,11 @@ public class Main {
         mapViewer.setOverlayPainter(compoundPainter);
 
         JTextPane textPane = new JTextPane();
-        textPane.setText("It appears that AbstractTileFactory is experiencing some sort of bug, so the default until that is fixed is Virtual Earth instead of Open Street Map");
+        textPane.setText("Team Name Buttons were manually pulled from The Blue Alliance, the city highlights were pulled from Open Street Map. So credits to both of them");
         textPane.setEditable(false);
 
         //Options for the map
-        String[] choices = {"Virtual Earth", "Open Street Map (Bugged)", "Hybrid Between Virtual Earth and Satellite", "Satellite",};
+        String[] choices = {"Virtual Earth", "Hybrid Between Virtual Earth and Satellite", "Satellite",};
         JComboBox comboBox = new JComboBox(choices);
         comboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -86,9 +86,6 @@ public class Main {
                 if (index == 0) {
                     info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.MAP);
                 } else if (index == 1) {
-
-                    info = new OSMTileFactoryInfo();
-                } else if (index == 2) {
                     info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.HYBRID);
                 } else {
                     info = new VirtualEarthTileFactoryInfo(VirtualEarthTileFactoryInfo.SATELLITE);
@@ -98,16 +95,6 @@ public class Main {
                 tileFactory.setThreadPoolSize(8);
             }
         });
-//        JButton linkedButton = new JButton("Go to The Blue Alliance");
-//        linkedButton.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                try {
-//                    desktop.browse(uri);
-//                } catch (IOException ex) {
-//                    throw new RuntimeException(ex);
-//                }
-//            }
-//        });
 
 
         GeoPosition wilsonTalentCenter = new GeoPosition(42.640123, -84.523664);
