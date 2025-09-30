@@ -17,14 +17,13 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.gson.*;
@@ -35,7 +34,7 @@ import com.google.gson.*;
 @SuppressWarnings("ALL")
 public class Main {
     static JXMapViewer mapViewer = new JXMapViewer();
-    static Set<ButtonWaypoint> buttonWaypoints = new HashSet<>();
+    //static Set<ButtonWaypoint> buttonWaypoints = new HashSet<>();
     static ButtonWaypointRenderer renderer = new ButtonWaypointRenderer(mapViewer);
 
     /**
@@ -55,21 +54,27 @@ public class Main {
 
         mapViewer.setLayout(null);
         //Centers
-        List<ButtonWaypoint> buttons = processJsonFolder("src/main/frcData/USA/Michigan");
-
+        //List<ButtonWaypoint> buttons = processJsonFolder("src/main/frcData/USA/Michigan");
+        List<List<ButtonWaypoint>> buttonsList = processStateJsonFolder("src/main/frcData/USA");
+        Set<ButtonWaypoint> buttonWaypoints;
         //This'll be even longer
-        buttonWaypoints = Set.of(buttons.toArray(new ButtonWaypoint[buttons.size()]));
+        buttonWaypoints = buttonsList.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toSet());
+
 
         renderer.setWaypoints(buttonWaypoints);
 
-        List<List<GeoPosition>> michiganUsaCitiesPolygonPoints = processGeoJsonFolder("src/main/geojsons/USA/Michigan");
+//        List<List<GeoPosition>> michiganUsaCitiesPolygonPoints = processGeoJsonFolder("src/main/geojsons/USA/Michigan");
+        List<List<List<GeoPosition>>> UsaCitiesPolygonPoints = processStateGeoJsonFolder("src/main/geojsons/USA");
         //System.out.println(michiganUsaCitiesPolygonPoints.size());
-        List<PolygonalPainter> michiganUsaPainters = createNewPainter(michiganUsaCitiesPolygonPoints);
+//        List<PolygonalPainter> michiganUsaPainters = createNewPainter(michiganUsaCitiesPolygonPoints);
+        List<List<PolygonalPainter>> UsaPainters = createListOfPainters(UsaCitiesPolygonPoints);
         //System.out.println(michiganUsaPainters.size());
 
 
         //Creates a Compound Painter that utilizes JXMapViewer
-        CompoundPainter<JXMapViewer> compoundPainter = createCompoundPainter(michiganUsaPainters, renderer);
+        CompoundPainter<JXMapViewer> compoundPainter = createCompoundPainter(UsaPainters, renderer);
         mapViewer.setOverlayPainter(compoundPainter);
 
         JTextPane textPane = new JTextPane();
@@ -97,10 +102,10 @@ public class Main {
         });
 
 
-        GeoPosition wilsonTalentCenter = new GeoPosition(42.640123, -84.523664);
+        GeoPosition someSpace = new GeoPosition(42.640123, -84.523664);
         //Setting the Zoom and address to WTC
         mapViewer.setZoom(5);
-        mapViewer.setAddressLocation(wilsonTalentCenter);
+        mapViewer.setAddressLocation(someSpace);
         //Frame
         JFrame frame = new JFrame("A Map");
         frame.getContentPane().add(mapViewer, BorderLayout.CENTER);
@@ -174,11 +179,39 @@ public class Main {
     }
 
     /**
+     * Pretty much a method used to process through a folder containing GeoJSON files
+     * @param directoryPath Unsurprisingly, the directory path, this path is actually used as a root folder
+     * @return Returns a list of lists, with said lists holding location mappings.
+     */
+    static List<List<List<GeoPosition>>> processStateGeoJsonFolder(String directoryPath) {
+        Path startPath = Paths.get(directoryPath);
+        List<List<List<GeoPosition>>> list = new ArrayList<>();
+        File rootFolder = new File(directoryPath);
+
+        if (!rootFolder.exists() || !rootFolder.isDirectory()) {
+            System.err.println("Oh, wait, why are you calling a specific file?");
+            return list;
+        }
+
+        File[] folders = rootFolder.listFiles(File::isDirectory);
+        if (folders != null) {
+            for (File subfolder : folders) {
+                String subfolderPath = subfolder.getAbsolutePath();
+                List<List<GeoPosition>> geopositionsFromSubfolder = processGeoJsonFolder(subfolderPath);
+                if (geopositionsFromSubfolder != null) {
+                    list.add(geopositionsFromSubfolder);
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
      * Makes a List of Painters
      * @param locations Pretty much like, the state + the country you live
      * @return Returns the list of painters
      */
-    static List<PolygonalPainter> createNewPainter(List<List<GeoPosition>> locations) {
+    static List<PolygonalPainter> createNewPainters(List<List<GeoPosition>> locations) {
         List<PolygonalPainter> painters = new ArrayList<>();
         for (List<GeoPosition> location : locations) {
             PolygonalPainter painter = new PolygonalPainter(
@@ -189,9 +222,31 @@ public class Main {
         return painters;
     }
 
-    static CompoundPainter<JXMapViewer> createCompoundPainter(List<PolygonalPainter> polygonPainters, ButtonWaypointRenderer renderer) {
+    /**
+     * Creates a list of lists, with each list having painters
+     * @param locations
+     * @return
+     */
+    static List<List<PolygonalPainter>> createListOfPainters(List<List<List<GeoPosition>>> locations) {
+        List<List<PolygonalPainter>> painters = new ArrayList<>();
+        for (List<List<GeoPosition>> location : locations) {
+            List<PolygonalPainter> painter = createNewPainters(location);
+            painters.add(painter);
+        }
+        return painters;
+    }
+
+    /**
+     * Effectively a method to easily make 1 compound painter, and not have thousands of lines
+     * @param polygonPainters Pretty much your list of polygon painters
+     * @param renderer Pretty much just the button waypoint renderer
+     * @return Returns a new {@link CompoundPainter}
+     */
+    static CompoundPainter<JXMapViewer> createCompoundPainter(List<List<PolygonalPainter>> polygonPainters, ButtonWaypointRenderer renderer) {
         List<AbstractPainter<JXMapViewer>> painters = new ArrayList<>();
-        painters.addAll(polygonPainters);
+        for  (List<PolygonalPainter> painter : polygonPainters) {
+            painters.addAll(painter);
+        }
         painters.add(renderer);
         return new CompoundPainter<JXMapViewer>(painters);
     }
@@ -199,8 +254,8 @@ public class Main {
     /**
      * Parses JSON files so that way I don't have to get an API key that complicates things.
      * @param file
-     * @return
-     * @throws FileNotFoundException
+     * @return Returns a {@link ButtonWaypoint}
+     * @throws FileNotFoundException In the event that the file this is looking for does not exist, it calls {@link System#exit(int)}
      */
     static ButtonWaypoint parseJsonFile(File file) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
@@ -244,6 +299,36 @@ public class Main {
             });
         } catch (IOException e) {
             System.err.println("Oh no 😢");
+        }
+        return list;
+    }
+
+    /**
+     * Thing that iterates through states, or in short, basically it will automatically make any new state folder work.
+     * @param directoryPath Pretty much the directory path, usually just called your country's name, acts as a root folder
+     * @return Returns a list of lists of type {@link ButtonWaypoint}
+     */
+    static List<List<ButtonWaypoint>> processStateJsonFolder(String directoryPath) {
+        List<List<ButtonWaypoint>> list = new ArrayList<>();
+        File rootFolder = new File(directoryPath);
+
+        if (!rootFolder.exists() || !rootFolder.isDirectory()) {
+            System.err.println("Oh, the directory path is invalid.");
+            return list;
+        }
+
+        File[] folders = rootFolder.listFiles(File::isDirectory);
+
+
+        if (folders != null){
+            for (File subfolder : folders) {
+                String subfolderPath = subfolder.getAbsolutePath();
+
+                List<ButtonWaypoint> pointsFromSubfolder = processJsonFolder(subfolderPath);
+                if  (pointsFromSubfolder != null) {
+                    list.add(pointsFromSubfolder);
+                }
+            }
         }
         return list;
     }
