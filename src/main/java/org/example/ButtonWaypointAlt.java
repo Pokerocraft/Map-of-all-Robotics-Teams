@@ -23,11 +23,15 @@ public class ButtonWaypointAlt extends DefaultWaypoint {
      * @param text Text for what the event is.
      * @param coord Pretty much the coordinates given in {@link Main} to act as central points
      * @param link Basically what the link is
+     * @param filename Uhh, a thing that was meant to actually put an image onto the
      * @throws URISyntaxException
      */
     public ButtonWaypointAlt(String text, GeoPosition coord, URI link, String filename) throws URISyntaxException {
         super(coord);
-        this.button = new JButton(text);
+        ImageIcon oldIcon = new ImageIcon(filename);
+        Image scaling = oldIcon.getImage().getScaledInstance(178, 60, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaling);
+        this.button = new JButton(scaledIcon);
         this.button.setBackground(new Color(194, 178,128));
         this.button.setForeground(new Color(255, 223, 0));
         this.uri = new  URI(link.toString());
@@ -42,7 +46,7 @@ public class ButtonWaypointAlt extends DefaultWaypoint {
     }
 
     /**
-     * A thing that is only used in {@link ButtonWaypointRenderer}
+     * A thing that is only used in {@link ButtonWaypointRendererAlt}
      * @return Returns the button inside this class
      */
     public JButton getButton() {
