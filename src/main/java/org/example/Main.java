@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,9 +37,19 @@ public class Main {
     static JXMapViewer mapViewer = new JXMapViewer();
     //static Set<ButtonWaypoint> buttonWaypoints = new HashSet<>();
     static ButtonWaypointRenderer renderer = new ButtonWaypointRenderer(mapViewer);
+    static ButtonWaypointAlt rendererAlt;
+
+    static {
+        try {
+            rendererAlt = new ButtonWaypointAlt(mapViewer);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * The Primary thing making this run
+     *
      * @param args
      * @throws FileNotFoundException
      * @throws URISyntaxException
@@ -57,6 +68,7 @@ public class Main {
         //List<ButtonWaypoint> buttons = processJsonFolder("src/main/frcData/USA/Michigan");
         List<List<ButtonWaypoint>> buttonsList = processStateJsonFolder("src/main/frcData/USA");
         Set<ButtonWaypoint> buttonWaypoints;
+        ButtonWaypointAlt eventWaypoint = parseEJsonFile( new File("src/main/specialPlaces/worlds.ejson"));
         //This'll be even longer
         buttonWaypoints = buttonsList.stream()
                 .flatMap(List::stream)
@@ -64,6 +76,7 @@ public class Main {
 
 
         renderer.setWaypoints(buttonWaypoints);
+
 
 //        List<List<GeoPosition>> michiganUsaCitiesPolygonPoints = processGeoJsonFolder("src/main/geojsons/USA/Michigan");
         List<List<List<GeoPosition>>> UsaCitiesPolygonPoints = processStateGeoJsonFolder("src/main/geojsons/USA");
@@ -155,6 +168,7 @@ public class Main {
 
     /**
      * Processes an entire folder worth of GeoJSON files
+     *
      * @param directoryPath The place where the folder where your files are found
      * @return Returns a List of Lists, with each list holding {@link GeoPosition GeoPositions}
      */
@@ -171,7 +185,7 @@ public class Main {
                     System.err.println("Oh no 😢");
                 }
             });
-        } catch (IOException e){
+        } catch (IOException e) {
             System.err.println("Whoops, an error 😢");
         }
 
@@ -180,6 +194,7 @@ public class Main {
 
     /**
      * Pretty much a method used to process through a folder containing GeoJSON files
+     *
      * @param directoryPath Unsurprisingly, the directory path, this path is actually used as a root folder
      * @return Returns a list of lists, with said lists holding location mappings.
      */
@@ -208,6 +223,7 @@ public class Main {
 
     /**
      * Makes a List of Painters
+     *
      * @param locations Pretty much like, the state + the country you live
      * @return Returns the list of painters
      */
@@ -224,6 +240,7 @@ public class Main {
 
     /**
      * Creates a list of lists, with each list having painters
+     *
      * @param locations
      * @return
      */
@@ -238,13 +255,14 @@ public class Main {
 
     /**
      * Effectively a method to easily make 1 compound painter, and not have thousands of lines
+     *
      * @param polygonPainters Pretty much your list of polygon painters
-     * @param renderer Pretty much just the button waypoint renderer
+     * @param renderer        Pretty much just the button waypoint renderer
      * @return Returns a new {@link CompoundPainter}
      */
     static CompoundPainter<JXMapViewer> createCompoundPainter(List<List<PolygonalPainter>> polygonPainters, ButtonWaypointRenderer renderer) {
         List<AbstractPainter<JXMapViewer>> painters = new ArrayList<>();
-        for  (List<PolygonalPainter> painter : polygonPainters) {
+        for (List<PolygonalPainter> painter : polygonPainters) {
             painters.addAll(painter);
         }
         painters.add(renderer);
@@ -253,6 +271,7 @@ public class Main {
 
     /**
      * Parses JSON files so that way I don't have to get an API key that complicates things.
+     *
      * @param file
      * @return Returns a {@link ButtonWaypoint}
      * @throws FileNotFoundException In the event that the file this is looking for does not exist, it calls {@link System#exit(int)}
@@ -262,7 +281,7 @@ public class Main {
         String jsonString = scanner.nextLine();
         ButtonWaypoint waypoint = null;
         Gson gson = new Gson();
-        try{
+        try {
             JSON json = gson.fromJson(jsonString, JSON.class);
             if (json != null) {
                 int teamNumber = json.getTeamNumber();
@@ -272,7 +291,7 @@ public class Main {
                 GeoPosition geoPosition = new GeoPosition(coordinates.get(0), coordinates.get(1));
                 waypoint = new ButtonWaypoint(name, geoPosition, teamNumber);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Welp, some error happened");
             System.exit(-1);
         }
@@ -281,6 +300,7 @@ public class Main {
 
     /**
      * Processes an entire folder worth of JSON files
+     *
      * @param directoryPath The path to the folder
      * @return Returns a list of {@link ButtonWaypoint Button Waypoints}
      */
@@ -288,12 +308,12 @@ public class Main {
         Path startPath = Paths.get(directoryPath);
         List<ButtonWaypoint> list = new ArrayList<>();
 
-        try(Stream<Path> paths = Files.walk(startPath)) {
+        try (Stream<Path> paths = Files.walk(startPath)) {
             paths.filter(Files::isRegularFile).filter(path -> path.toString().endsWith(".json")).forEach(path -> {
                 try {
                     ButtonWaypoint waypoint = parseJsonFile(path.toFile());
                     list.add(waypoint);
-                } catch (FileNotFoundException e){
+                } catch (FileNotFoundException e) {
                     System.err.println("Oh no 😢");
                 }
             });
@@ -305,6 +325,7 @@ public class Main {
 
     /**
      * Thing that iterates through states, or in short, basically it will automatically make any new state folder work.
+     *
      * @param directoryPath Pretty much the directory path, usually just called your country's name, acts as a root folder
      * @return Returns a list of lists of type {@link ButtonWaypoint}
      */
@@ -320,16 +341,43 @@ public class Main {
         File[] folders = rootFolder.listFiles(File::isDirectory);
 
 
-        if (folders != null){
+        if (folders != null) {
             for (File subfolder : folders) {
                 String subfolderPath = subfolder.getAbsolutePath();
 
                 List<ButtonWaypoint> pointsFromSubfolder = processJsonFolder(subfolderPath);
-                if  (pointsFromSubfolder != null) {
+                if (pointsFromSubfolder != null) {
                     list.add(pointsFromSubfolder);
                 }
             }
         }
         return list;
+    }
+
+    /**
+     * A method for parsing the custom file type of EJson, which is effectively Json with an E in the front
+     * @param file
+     * @return
+     * @throws FileNotFoundException
+     */
+    static ButtonWaypointAlt parseEJsonFile(File file) throws FileNotFoundException {
+        Scanner scanner = new Scanner(file);
+        String ejsonString = scanner.nextLine();
+        ButtonWaypointAlt waypoint = null;
+        Gson gson = new Gson();
+        try {
+            EJSON ejson = gson.fromJson(ejsonString, EJSON.class);
+            if (ejson != null) {
+                String reasonForImportance = ejson.getReasonForImportance();
+                List<Double> coordinates = ejson.getCoordinates();
+                //System.out.println(coordinates);
+                GeoPosition geoPosition = new GeoPosition(coordinates.get(0), coordinates.get(1));
+                waypoint = new ButtonWaypointAlt(reasonForImportance, geoPosition, new URI("https://www.firstinspires.org/programs/first-championship"));
+            }
+        } catch (Exception e) {
+            System.err.println("Welp, some error happened");
+            System.exit(-1);
+        }
+        return waypoint;
     }
 }
