@@ -37,15 +37,7 @@ public class Main {
     static JXMapViewer mapViewer = new JXMapViewer();
     //static Set<ButtonWaypoint> buttonWaypoints = new HashSet<>();
     static ButtonWaypointRenderer renderer = new ButtonWaypointRenderer(mapViewer);
-    static ButtonWaypointAlt rendererAlt;
-
-    static {
-        try {
-            rendererAlt = new ButtonWaypointAlt(mapViewer);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    static ButtonWaypointRendererAlt rendererAlt = new ButtonWaypointRendererAlt(mapViewer);
 
     /**
      * The Primary thing making this run
@@ -76,6 +68,8 @@ public class Main {
 
 
         renderer.setWaypoints(buttonWaypoints);
+        Set<ButtonWaypointAlt> eventWaypoints = Collections.singleton(eventWaypoint);
+        rendererAlt.setWaypoints(eventWaypoints);
 
 
 //        List<List<GeoPosition>> michiganUsaCitiesPolygonPoints = processGeoJsonFolder("src/main/geojsons/USA/Michigan");
@@ -88,6 +82,7 @@ public class Main {
 
         //Creates a Compound Painter that utilizes JXMapViewer
         CompoundPainter<JXMapViewer> compoundPainter = createCompoundPainter(UsaPainters, renderer);
+        compoundPainter.addPainter(rendererAlt);
         mapViewer.setOverlayPainter(compoundPainter);
 
         JTextPane textPane = new JTextPane();
@@ -372,7 +367,7 @@ public class Main {
                 List<Double> coordinates = ejson.getCoordinates();
                 //System.out.println(coordinates);
                 GeoPosition geoPosition = new GeoPosition(coordinates.get(0), coordinates.get(1));
-                waypoint = new ButtonWaypointAlt(reasonForImportance, geoPosition, new URI("https://www.firstinspires.org/programs/first-championship"));
+                waypoint = new ButtonWaypointAlt(reasonForImportance, geoPosition, new URI("https://www.firstinspires.org/programs/first-championship"), "src/main/specialPlaces/worlds.png");
             }
         } catch (Exception e) {
             System.err.println("Welp, some error happened");

@@ -25,9 +25,11 @@ public class ButtonWaypointAlt extends DefaultWaypoint {
      * @param link Basically what the link is
      * @throws URISyntaxException
      */
-    public ButtonWaypointAlt(String text, GeoPosition coord, URI link) throws URISyntaxException {
+    public ButtonWaypointAlt(String text, GeoPosition coord, URI link, String filename) throws URISyntaxException {
         super(coord);
         this.button = new JButton(text);
+        this.button.setBackground(new Color(194, 178,128));
+        this.button.setForeground(new Color(255, 223, 0));
         this.uri = new  URI(link.toString());
 
         this.button.addActionListener(e -> {
