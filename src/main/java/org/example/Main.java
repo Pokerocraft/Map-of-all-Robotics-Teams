@@ -58,7 +58,8 @@ public class Main {
         mapViewer.setLayout(null);
         //Centers
         //List<ButtonWaypoint> buttons = processJsonFolder("src/main/frcData/USA/Michigan");
-        List<List<ButtonWaypoint>> buttonsList = processStateJsonFolder("src/main/frcData/USA");
+//        List<List<ButtonWaypoint>> buttonsList = processStateJsonFolder("src/main/frcData/USA");
+        List<List<ButtonWaypoint>> buttonsList = processfrcDataFolder();
         Set<ButtonWaypoint> buttonWaypoints;
         ButtonWaypointAlt eventWaypoint = parseEJsonFile( new File("src/main/specialPlaces/worlds.ejson"));
         //This'll be even longer
@@ -73,15 +74,16 @@ public class Main {
 
 
 //        List<List<GeoPosition>> michiganUsaCitiesPolygonPoints = processGeoJsonFolder("src/main/geojsons/USA/Michigan");
-        List<List<List<GeoPosition>>> UsaCitiesPolygonPoints = processStateGeoJsonFolder("src/main/geojsons/USA");
+//        List<List<List<GeoPosition>>> UsaCitiesPolygonPoints = processStateGeoJsonFolder("src/main/geojsons/USA");
+        List<List<List<GeoPosition>>> cityPolygonPoints = processGeojsonsFolder();
         //System.out.println(michiganUsaCitiesPolygonPoints.size());
 //        List<PolygonalPainter> michiganUsaPainters = createNewPainter(michiganUsaCitiesPolygonPoints);
-        List<List<PolygonalPainter>> UsaPainters = createListOfPainters(UsaCitiesPolygonPoints);
+        List<List<PolygonalPainter>> painters = createListOfPainters(cityPolygonPoints);
         //System.out.println(michiganUsaPainters.size());
 
 
         //Creates a Compound Painter that utilizes JXMapViewer
-        CompoundPainter<JXMapViewer> compoundPainter = createCompoundPainter(UsaPainters, renderer);
+        CompoundPainter<JXMapViewer> compoundPainter = createCompoundPainter(painters, renderer);
         compoundPainter.addPainter(rendererAlt);
         mapViewer.setOverlayPainter(compoundPainter);
 
@@ -188,7 +190,7 @@ public class Main {
     }
 
     /**
-     * Pretty much a method used to process through a folder containing GeoJSON files
+     * A method used to process through a folder containing GeoJSON files
      *
      * @param directoryPath Unsurprisingly, the directory path, this path is actually used as a root folder
      * @return Returns a list of lists, with said lists holding location mappings.
@@ -215,6 +217,8 @@ public class Main {
         }
         return list;
     }
+
+
 
     /**
      * Makes a List of Painters
@@ -294,7 +298,7 @@ public class Main {
     }
 
     /**
-     * Processes an entire folder worth of JSON files
+     * Processes an entire folder worth of JSON files, basically the state
      *
      * @param directoryPath The path to the folder
      * @return Returns a list of {@link ButtonWaypoint Button Waypoints}
@@ -350,10 +354,61 @@ public class Main {
     }
 
     /**
+     * Processes the entire frcData folder to get all teams
+     * @return Returns a list os lists of type {@link ButtonWaypoint}, despite the fact that it initially starts out as a List of Lists of Lists of type {@link ButtonWaypoint}
+     */
+    static List<List<ButtonWaypoint>> processfrcDataFolder(){
+        List<List<List<ButtonWaypoint>>> list = new ArrayList<>();
+        File rootFolder = new  File("src/main/frcData");
+        if (!rootFolder.exists() || !rootFolder.isDirectory()) {
+            System.err.println("Oh, the directory path is invalid.");
+            return null;
+        }
+        File[] folders = rootFolder.listFiles(File::isDirectory);
+
+        if (folders != null) {
+            for (File subfolder : folders) {
+                List<List<ButtonWaypoint>> pointsFromSubfolder = processStateJsonFolder(subfolder.getAbsolutePath());
+                if (pointsFromSubfolder != null) {
+                    list.add(pointsFromSubfolder);
+                }
+            }
+        }
+        List<List<ButtonWaypoint>> flatterList = list.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+        return flatterList;
+    }
+
+    static List<List<List<GeoPosition>>> processGeojsonsFolder() {
+        List<List<List<List<GeoPosition>>>> list = new ArrayList<>();
+        File rootFolder = new File("src/main/geojsons");
+
+        if  (!rootFolder.exists() || !rootFolder.isDirectory()) {
+            System.err.println("Oh, wait, why are you calling a specific file?");
+            return null;
+        }
+        File[] folders = rootFolder.listFiles(File::isDirectory);
+        if (folders != null) {
+            for (File subfolder : folders) {
+                String subfolderPath = subfolder.getAbsolutePath();
+                List<List<List<GeoPosition>>> geopositionsFromSubfolder = processStateGeoJsonFolder(subfolderPath);
+                if (geopositionsFromSubfolder != null) {
+                    list.add(geopositionsFromSubfolder);
+                }
+            }
+        }
+        List<List<List<GeoPosition>>> flatterList = list.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+        return flatterList;
+    }
+
+    /**
      * A method for parsing the custom file type of EJson, which is effectively Json with an E in the front
-     * @param file
-     * @return
-     * @throws FileNotFoundException
+     * @param file used to look for a specific EJSON file
+     * @return Returns the waypoint
+     * @throws FileNotFoundException Throws an error in the event that a specific file isn't found
      */
     static ButtonWaypointAlt parseEJsonFile(File file) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
