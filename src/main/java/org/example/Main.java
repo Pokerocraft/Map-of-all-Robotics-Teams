@@ -380,6 +380,10 @@ public class Main {
         return flatterList;
     }
 
+    /**
+     *
+     * @return
+     */
     static List<List<List<GeoPosition>>> processGeojsonsFolder() {
         List<List<List<List<GeoPosition>>>> list = new ArrayList<>();
         File rootFolder = new File("src/main/geojsons");
