@@ -7,6 +7,8 @@ import org.jxmapviewer.viewer.WaypointPainter;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An extension of {@link WaypointPainter} to render {@link ButtonWaypoint buttons that act as waypoints}
@@ -49,5 +51,24 @@ public class ButtonWaypointRenderer extends WaypointPainter<ButtonWaypoint> {
                 map.add(button);
             }
         }
+        if(getWaypoints().isEmpty()){
+            List<JButton> buttons = new ArrayList<>();
+            for (Component c: map.getComponents()){
+                if (c instanceof JButton){
+                    buttons.add((JButton) c);
+                }
+            }
+            for (int i = 0; i < buttons.size(); i++){
+                if (!buttons.get(i).getText().equalsIgnoreCase("")){
+                    map.remove(buttons.get(i));
+                }
+            }
+        }
     }
+    @Override
+    public void setVisible(boolean aFlag){
+        super.setVisible(aFlag);
+    }
+
+
 }

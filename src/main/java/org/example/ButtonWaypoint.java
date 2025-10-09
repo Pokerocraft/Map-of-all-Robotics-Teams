@@ -46,4 +46,8 @@ public class ButtonWaypoint extends DefaultWaypoint {
     public JButton getButton() {
         return button;
     }
+
+    public void setVisible(boolean aFlag){
+        this.setVisible(aFlag);
+    }
 }

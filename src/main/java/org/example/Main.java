@@ -14,6 +14,7 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class Main {
     //static Set<ButtonWaypoint> buttonWaypoints = new HashSet<>();
     static ButtonWaypointRenderer renderer = new ButtonWaypointRenderer(mapViewer);
     static ButtonWaypointRendererAlt rendererAlt = new ButtonWaypointRendererAlt(mapViewer);
-
+    static Set<ButtonWaypoint> buttonWaypointstemp=new HashSet<>();
     /**
      * The Primary thing making this run
      *
@@ -57,38 +58,28 @@ public class Main {
 
         mapViewer.setLayout(null);
         //Centers
-        //List<ButtonWaypoint> buttons = processJsonFolder("src/main/frcData/USA/Michigan");
-//        List<List<ButtonWaypoint>> buttonsList = processStateJsonFolder("src/main/frcData/USA");
         List<List<ButtonWaypoint>> buttonsList = processfrcDataFolder();
         Set<ButtonWaypoint> buttonWaypoints;
         ButtonWaypointAlt eventWaypoint = parseEJsonFile( new File("src/main/specialPlaces/worlds.ejson"));
-        //This'll be even longer
-        buttonWaypoints = buttonsList.stream()
-                .flatMap(List::stream)
-                .collect(Collectors.toSet());
+        buttonWaypoints = buttonsList.stream().flatMap(List::stream).collect(Collectors.toSet());
 
-
-        renderer.setWaypoints(buttonWaypoints);
         Set<ButtonWaypointAlt> eventWaypoints = Collections.singleton(eventWaypoint);
         rendererAlt.setWaypoints(eventWaypoints);
 
 
-//        List<List<GeoPosition>> michiganUsaCitiesPolygonPoints = processGeoJsonFolder("src/main/geojsons/USA/Michigan");
-//        List<List<List<GeoPosition>>> UsaCitiesPolygonPoints = processStateGeoJsonFolder("src/main/geojsons/USA");
+        //Cities and Painters
         List<List<List<GeoPosition>>> cityPolygonPoints = processGeojsonsFolder();
-        //System.out.println(michiganUsaCitiesPolygonPoints.size());
-//        List<PolygonalPainter> michiganUsaPainters = createNewPainter(michiganUsaCitiesPolygonPoints);
         List<List<PolygonalPainter>> painters = createListOfPainters(cityPolygonPoints);
-        //System.out.println(michiganUsaPainters.size());
 
 
         //Creates a Compound Painter that utilizes JXMapViewer
-        CompoundPainter<JXMapViewer> compoundPainter = createCompoundPainter(painters, renderer);
+        CompoundPainter<JXMapViewer> compoundPainter = createCompoundPainter(painters);
+        compoundPainter.addPainter(renderer);
         compoundPainter.addPainter(rendererAlt);
         mapViewer.setOverlayPainter(compoundPainter);
-
+        //Text Pane at the bottom of the screen
         JTextPane textPane = new JTextPane();
-        textPane.setText("Team Name Buttons were manually pulled from The Blue Alliance, the city highlights were pulled from Open Street Map. So credits to both of them");
+        textPane.setText("Zoom: " + mapViewer.getZoom());
         textPane.setEditable(false);
 
         //Options for the map
@@ -112,9 +103,10 @@ public class Main {
         });
 
 
-        GeoPosition someSpace = new GeoPosition(42.640123, -84.523664);
+        GeoPosition someSpace = new GeoPosition(0, 0);
         //Setting the Zoom and address to WTC
-        mapViewer.setZoom(5);
+        mapViewer.setZoom(17);
+        textPane.setText("Zoom: " + mapViewer.getZoom());
         mapViewer.setAddressLocation(someSpace);
         //Frame
         JFrame frame = new JFrame("A Map");
@@ -130,6 +122,24 @@ public class Main {
         mapViewer.addMouseListener(mouseListener);
         mapViewer.addMouseMotionListener(mouseListener);
         mapViewer.addMouseWheelListener(new ZoomMouseWheelListenerCenter(mapViewer));
+        PropertyChangeListener zoomListener = evt -> {
+            if ("zoom".equals(evt.getPropertyName())) {
+                int newZoom = (Integer) evt.getNewValue();
+                textPane.setText("Zoom: " + newZoom);
+            }
+            if (mapViewer.getZoom() >= 9) {
+                compoundPainter.removePainter(renderer);
+                renderer.setWaypoints(buttonWaypointstemp);
+                compoundPainter.addPainter(renderer);
+                mapViewer.repaint();
+            } else {
+                compoundPainter.removePainter(renderer);
+                renderer.setWaypoints(buttonWaypoints);
+                compoundPainter.addPainter(renderer);
+                mapViewer.repaint();
+            }
+        };
+        mapViewer.addPropertyChangeListener(zoomListener);
     }
 
 
@@ -259,12 +269,11 @@ public class Main {
      * @param renderer        Pretty much just the button waypoint renderer
      * @return Returns a new {@link CompoundPainter}
      */
-    static CompoundPainter<JXMapViewer> createCompoundPainter(List<List<PolygonalPainter>> polygonPainters, ButtonWaypointRenderer renderer) {
+    static CompoundPainter<JXMapViewer> createCompoundPainter(List<List<PolygonalPainter>> polygonPainters) {
         List<AbstractPainter<JXMapViewer>> painters = new ArrayList<>();
         for (List<PolygonalPainter> painter : polygonPainters) {
             painters.addAll(painter);
         }
-        painters.add(renderer);
         return new CompoundPainter<JXMapViewer>(painters);
     }
 
@@ -381,8 +390,8 @@ public class Main {
     }
 
     /**
-     *
-     * @return
+     *Processes all data found within the folder called geojsons, well, all except the test geojson
+     * @return Returns what is essentially a list of lists of lists of {@link GeoPosition GeoPositions}, so that way all cities work here
      */
     static List<List<List<GeoPosition>>> processGeojsonsFolder() {
         List<List<List<List<GeoPosition>>>> list = new ArrayList<>();
@@ -434,4 +443,6 @@ public class Main {
         }
         return waypoint;
     }
+
+
 }
