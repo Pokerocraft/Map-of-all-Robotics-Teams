@@ -68,15 +68,21 @@ public class Main {
 
 
         //Cities and Painters
-        static Map<String, List<GeoPosition>> cityPolygonPoints = new HashMap<>();
-        static List<PolygonalPainter> painters = new ArrayList<>();
+        Map<String, List<GeoPosition>> cityPolygonPoints = new HashMap<>();
+        List<PolygonalPainter> painters = new ArrayList<>();
 
+        cityPolygonPoints = processGeojsonsFolder("src/main/geojsons");
+        painters = createNewPainters(cityPolygonPoints);
 
+        //Wrap the painters in a list, for simplicity sake
+        List<List<PolygonalPainter>> nestedPainers = new ArrayList<>();
+        nestedPainers.add(painters);
 
         //Creates a Compound Painter that utilizes JXMapViewer
-        CompoundPainter<JXMapViewer> compoundPainter = createCompoundPainter(painters);
+        CompoundPainter<JXMapViewer> compoundPainter = createCompoundPainter(nestedPainers);
         compoundPainter.addPainter(renderer);
         compoundPainter.addPainter(rendererAlt);
+
         mapViewer.setOverlayPainter(compoundPainter);
         //Text Pane at the bottom of the screen
         JTextPane textPane = new JTextPane();
@@ -139,6 +145,14 @@ public class Main {
             if ("zoom".equals(evt.getPropertyName())) {
                 int newZoom = (Integer) evt.getNewValue();
                 textPane.setText("Zoom: " + newZoom);
+
+                boolean shouldShow = (newZoom <= 8);
+                for (ButtonWaypoint wp : buttonWaypoints){
+                    JButton btn = wp.getButton();
+                    if (btn != null) {
+                        btn.setVisible(shouldShow);
+                    }
+                }
             }
             if (mapViewer.getZoom() >= 9) {
                 compoundPainter.removePainter(renderer);
