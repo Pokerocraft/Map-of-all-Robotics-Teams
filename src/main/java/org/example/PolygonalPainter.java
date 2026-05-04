@@ -13,6 +13,7 @@ import java.util.List;
  * A Painting Class used to put in lots of spaces on the map
  */
 public class PolygonalPainter extends AbstractPainter<JXMapViewer>{
+    private String name;
     private final List<GeoPosition> polygonPoints;
     private final Color fillColor;
     private final Color strokeColor;
@@ -23,13 +24,27 @@ public class PolygonalPainter extends AbstractPainter<JXMapViewer>{
      * @param fillColor Was initially planned to be used to fill out the space in between line strokes. Now just used as pretty much another color for line strokes
      * @param strokeColor Pretty Much the color of line strokes
      */
-    public PolygonalPainter(List<GeoPosition> polygonPoints, Color fillColor, Color strokeColor){
+    public PolygonalPainter(List<GeoPosition> polygonPoints, Color fillColor, Color strokeColor, String name) {
         this.polygonPoints = polygonPoints;
         this.fillColor = fillColor;
         this.strokeColor = strokeColor;
+        this.name = name;
 
         setAntialiasing(true);
         setCacheable(false);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Helper to get a center point for a search function.
+     * @return Returns either nothing or the first set of points, I guess, maybe
+     */
+    public GeoPosition getCenter() {
+        if (polygonPoints.isEmpty()) return null;
+        return polygonPoints.get(0);
     }
 
     /**

@@ -68,8 +68,9 @@ public class Main {
 
 
         //Cities and Painters
-        List<List<List<GeoPosition>>> cityPolygonPoints = processGeojsonsFolder();
-        List<List<PolygonalPainter>> painters = createListOfPainters(cityPolygonPoints);
+        static Map<String, List<GeoPosition>> cityPolygonPoints = new HashMap<>();
+        static List<PolygonalPainter> painters = new ArrayList<>();
+
 
 
         //Creates a Compound Painter that utilizes JXMapViewer
@@ -102,6 +103,18 @@ public class Main {
             }
         });
 
+        JTextField searchField = new JTextField(20);
+        searchField.setToolTipText("Enter Team Number or City Name");
+
+        JPanel headerPanel = new JPanel(new  BorderLayout());
+        JPanel searchSection = new  JPanel(new FlowLayout(FlowLayout.LEFT));
+        searchSection.add(new JLabel("Search:  "));
+        searchSection.add(searchField);
+        JPanel settingsSection = new   JPanel(new FlowLayout(FlowLayout.RIGHT));
+        settingsSection.add(new JLabel("View:  "));
+        settingsSection.add(comboBox);
+        headerPanel.add(searchSection, BorderLayout.WEST);
+        headerPanel.add(settingsSection, BorderLayout.EAST);
 
         GeoPosition someSpace = new GeoPosition(0, 0);
         //Setting the Zoom and address to WTC
@@ -111,7 +124,7 @@ public class Main {
         //Frame
         JFrame frame = new JFrame("A Map");
         frame.getContentPane().add(mapViewer, BorderLayout.CENTER);
-        frame.getContentPane().add(comboBox, BorderLayout.NORTH);
+        frame.getContentPane().add(headerPanel, BorderLayout.NORTH);
         frame.getContentPane().add(textPane, BorderLayout.SOUTH);
 //        frame.getContentPane().add(linkedButton, BorderLayout.EAST);
         frame.setSize(800, 600);
@@ -150,28 +163,37 @@ public class Main {
      * @throws FileNotFoundException In the event there is no file there
      */
     static List<GeoPosition> parseGeoJsonFile(File file) throws FileNotFoundException {
-        ArrayList<GeoPosition> list = new ArrayList<GeoPosition>();
-        Scanner scanner = new Scanner(file);
-        String geoJsonString = scanner.nextLine();
-        Gson gson = new Gson();
+        ArrayList<GeoPosition> list = new ArrayList<>();
+        String content = new Scanner(file).useDelimiter("\\Z").next();
+        JsonObject json = new JsonParser().parse(content).getAsJsonObject();
         try {
-            GeoJSON geoJSON = gson.fromJson(geoJsonString, GeoJSON.class);
-            if (geoJSON != null) {
-                List<List<Double>> coordinates = geoJSON.getCoordinates();
-                //System.out.println("Coordinates");
-                for (List<Double> coordinate : coordinates) {
-                    //for (Double place:  coordinate) {
-                    list.add(new GeoPosition(coordinate.get(1), coordinate.get(0)));
-                    //System.out.println("Longitude: " + coordinate.get(0) + " Latitude: " + coordinate.get(1));
-                    // }
-                }
+            JsonArray coords = findDeepestArray(json.get("coordinates").getAsJsonArray());
+            for (JsonElement element : coords) {
+                JsonArray point = element.getAsJsonArray();
+                list.add(new GeoPosition(point.get(1).getAsDouble(), point.get(0).getAsDouble())); //Inherently, GeoJSON uses Longitude, Latitude rather than Lat, Lon, most things require Lat, Lon
             }
         } catch (Exception e) {
-            System.err.println("Welp, you likely forgot that the code has to have 2 of these [] not 4 at the beginning and end");
-            System.exit(-1);
+            System.err.println("Skipped " + file.getName()  + ": " + e.getMessage());
         }
         return list;
     }
+
+    /**
+     * Helper method for {@link #parseGeoJsonFile} to effectively peel the brakcets until we reach the actual coordinates
+     * @param array Effectively a json array
+     * @return
+     */
+    private static JsonArray findDeepestArray(JsonArray array) {
+        if (array.size() > 0 && array.get(0).isJsonArray()) {
+            if (array.get(0).getAsJsonArray().size() > 0 &&
+                    array.get(0).getAsJsonArray().get(0).isJsonPrimitive()) {
+                return  array;
+            }
+            return  findDeepestArray(array.get(0).getAsJsonArray());
+        }
+        return array;
+    }
+
 
     /**
      * Processes an entire folder worth of GeoJSON files
@@ -179,24 +201,25 @@ public class Main {
      * @param directoryPath The place where the folder where your files are found
      * @return Returns a List of Lists, with each list holding {@link GeoPosition GeoPositions}
      */
-    static List<List<GeoPosition>> processGeoJsonFolder(String directoryPath) {
+    static Map<String, List<GeoPosition>> processGeoJsonFolder(String directoryPath) {
         Path startPath = Paths.get(directoryPath);
-        List<List<GeoPosition>> list = new ArrayList<>();
-
+        Map<String, List<GeoPosition>> map = new HashMap<>();
         try (Stream<Path> paths = Files.walk(startPath)) {
-            paths.filter(Files::isRegularFile).filter(path -> path.toString().endsWith(".geojson")).forEach(path -> {
-                try {
-                    List<GeoPosition> geopositions = parseGeoJsonFile(path.toFile());
-                    list.add(geopositions);
-                } catch (FileNotFoundException e) {
-                    System.err.println("Oh no 😢");
-                }
-            });
+            paths.filter(Files::isRegularFile)
+                    .filter(path -> path.toString().endsWith(".geojson"))
+                    .forEach(path -> {
+                        try {
+                            List<GeoPosition> geoPositions = parseGeoJsonFile(path.toFile());
+                            String name = path.getFileName().toString().replace(".geojson", "");
+                            map.put(name, geoPositions);
+                        } catch (FileNotFoundException e) {
+                            System.err.println("Oh... the file wasn't found...");
+                        }
+                    });
         } catch (IOException e) {
-            System.err.println("Whoops, an error 😢");
+            System.err.println("Oh, an IO error happened...");
         }
-
-        return list;
+        return map;
     }
 
     /**
@@ -205,27 +228,8 @@ public class Main {
      * @param directoryPath Unsurprisingly, the directory path, this path is actually used as a root folder
      * @return Returns a list of lists, with said lists holding location mappings.
      */
-    static List<List<List<GeoPosition>>> processStateGeoJsonFolder(String directoryPath) {
-        Path startPath = Paths.get(directoryPath);
-        List<List<List<GeoPosition>>> list = new ArrayList<>();
-        File rootFolder = new File(directoryPath);
-
-        if (!rootFolder.exists() || !rootFolder.isDirectory()) {
-            System.err.println("Oh, wait, why are you calling a specific file?");
-            return list;
-        }
-
-        File[] folders = rootFolder.listFiles(File::isDirectory);
-        if (folders != null) {
-            for (File subfolder : folders) {
-                String subfolderPath = subfolder.getAbsolutePath();
-                List<List<GeoPosition>> geopositionsFromSubfolder = processGeoJsonFolder(subfolderPath);
-                if (geopositionsFromSubfolder != null) {
-                    list.add(geopositionsFromSubfolder);
-                }
-            }
-        }
-        return list;
+    static Map<String, List<GeoPosition>> processStateGeoJsonFolder(String statePath) {
+        return processGeoJsonFolder(statePath);
     }
 
 
@@ -236,12 +240,12 @@ public class Main {
      * @param locations Pretty much like, the state + the country you live
      * @return Returns the list of painters
      */
-    static List<PolygonalPainter> createNewPainters(List<List<GeoPosition>> locations) {
+    static List<PolygonalPainter> createNewPainters(Map<String, List<GeoPosition>> locationsMap) {
         List<PolygonalPainter> painters = new ArrayList<>();
-        for (List<GeoPosition> location : locations) {
-            PolygonalPainter painter = new PolygonalPainter(
-                    location, Color.red, Color.red
-            );
+        for (Map.Entry<String, List<GeoPosition>> entry : locationsMap.entrySet()) {
+            String cityName = entry.getKey();
+            List<GeoPosition> coords = entry.getValue();
+            PolygonalPainter painter = new PolygonalPainter(coords, Color.red, Color.red, cityName);
             painters.add(painter);
         }
         return painters;
@@ -253,13 +257,8 @@ public class Main {
      * @param locations
      * @return
      */
-    static List<List<PolygonalPainter>> createListOfPainters(List<List<List<GeoPosition>>> locations) {
-        List<List<PolygonalPainter>> painters = new ArrayList<>();
-        for (List<List<GeoPosition>> location : locations) {
-            List<PolygonalPainter> painter = createNewPainters(location);
-            painters.add(painter);
-        }
-        return painters;
+    static List<PolygonalPainter> createListOfPainters(Map<String, List<GeoPosition>> locationsMap) {
+        return createNewPainters(locationsMap);
     }
 
     /**
@@ -393,28 +392,13 @@ public class Main {
      *Processes all data found within the folder called geojsons, well, all except the test geojson
      * @return Returns what is essentially a list of lists of lists of {@link GeoPosition GeoPositions}, so that way all cities work here
      */
-    static List<List<List<GeoPosition>>> processGeojsonsFolder() {
-        List<List<List<List<GeoPosition>>>> list = new ArrayList<>();
-        File rootFolder = new File("src/main/geojsons");
-
-        if  (!rootFolder.exists() || !rootFolder.isDirectory()) {
-            System.err.println("Oh, wait, why are you calling a specific file?");
-            return null;
+    static Map<String, List<GeoPosition>> processGeojsonsFolder(String rootPath) {
+        Map<String, List<GeoPosition>> masterMap = new HashMap<>();
+        File rootFolder = new File(rootPath);
+        for (File stateDir : rootFolder.listFiles(File::isDirectory)) {
+            masterMap.putAll(processStateGeoJsonFolder(stateDir.getAbsolutePath()));
         }
-        File[] folders = rootFolder.listFiles(File::isDirectory);
-        if (folders != null) {
-            for (File subfolder : folders) {
-                String subfolderPath = subfolder.getAbsolutePath();
-                List<List<List<GeoPosition>>> geopositionsFromSubfolder = processStateGeoJsonFolder(subfolderPath);
-                if (geopositionsFromSubfolder != null) {
-                    list.add(geopositionsFromSubfolder);
-                }
-            }
-        }
-        List<List<List<GeoPosition>>> flatterList = list.stream()
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
-        return flatterList;
+        return masterMap;
     }
 
     /**
