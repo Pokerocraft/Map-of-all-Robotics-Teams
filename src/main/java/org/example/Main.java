@@ -181,15 +181,30 @@ public class Main {
         String content = new Scanner(file).useDelimiter("\\Z").next();
         JsonObject json = new JsonParser().parse(content).getAsJsonObject();
         try {
-            JsonArray coords = findDeepestArray(json.get("coordinates").getAsJsonArray());
-            for (JsonElement element : coords) {
-                JsonArray point = element.getAsJsonArray();
-                list.add(new GeoPosition(point.get(1).getAsDouble(), point.get(0).getAsDouble())); //Inherently, GeoJSON uses Longitude, Latitude rather than Lat, Lon, most things require Lat, Lon
-            }
+            JsonArray allCoordinates = json.get("coordinates").getAsJsonArray();
+            processNestedCoordinates(allCoordinates, list);
         } catch (Exception e) {
             System.err.println("Skipped " + file.getName()  + ": " + e.getMessage());
         }
         return list;
+    }
+
+    /**
+     * Helper method to try flattening stuff
+     * @param array
+     * @param list
+     */
+    private static void processNestedCoordinates(JsonArray array, List<GeoPosition> list) {
+        for (JsonElement element : array) {
+            if (element.isJsonArray()) {
+                JsonArray subArray = element.getAsJsonArray();
+                if (subArray.size() == 2 && subArray.get(0).isJsonPrimitive()) {
+                    list.add(new GeoPosition(subArray.get(1).getAsDouble(), subArray.get(0).getAsDouble()));
+                } else {
+                    processNestedCoordinates(subArray, list);
+                }
+            }
+        }
     }
 
     /**
