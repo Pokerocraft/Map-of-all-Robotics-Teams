@@ -116,11 +116,11 @@ public class Main {
         JPanel searchSection = new  JPanel(new FlowLayout(FlowLayout.LEFT));
         searchSection.add(new JLabel("Search:  "));
         searchSection.add(searchField);
-        JPanel settingsSection = new   JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel settingsSection = new   JPanel(new FlowLayout(FlowLayout.CENTER));
         settingsSection.add(new JLabel("View:  "));
         settingsSection.add(comboBox);
-        headerPanel.add(searchSection, BorderLayout.WEST);
-        headerPanel.add(settingsSection, BorderLayout.EAST);
+        //headerPanel.add(searchSection, BorderLayout.WEST);
+        headerPanel.add(settingsSection, BorderLayout.CENTER);
 
         GeoPosition someSpace = new GeoPosition(0, 0);
         //Setting the Zoom and address to WTC
