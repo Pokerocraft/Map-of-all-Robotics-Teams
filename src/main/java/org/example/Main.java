@@ -146,7 +146,7 @@ public class Main {
                 int newZoom = (Integer) evt.getNewValue();
                 textPane.setText("Zoom: " + newZoom);
 
-                boolean shouldShow = (newZoom <= 8);
+                boolean shouldShow = (newZoom <= 12);
                 for (ButtonWaypoint wp : buttonWaypoints){
                     JButton btn = wp.getButton();
                     if (btn != null) {
@@ -154,7 +154,7 @@ public class Main {
                     }
                 }
             }
-            if (mapViewer.getZoom() >= 9) {
+            if (mapViewer.getZoom() >= 13) {
                 compoundPainter.removePainter(renderer);
                 renderer.setWaypoints(buttonWaypointstemp);
                 compoundPainter.addPainter(renderer);

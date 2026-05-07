@@ -1,54 +1,5 @@
 [
 {
-"team_number": 102,
-"nickname": "The Gearheads",
-"city": "Somerville",
-"state_prov": "New Jersey",
-"country": "USA"
-},
-{
-"team_number": 103,
-"nickname": "Cybersonics",
-"city": "Kintnersville",
-"state_prov": "Pennsylvania",
-"country": "USA"
-},
-{
-"team_number": 107,
-"nickname": "Team R.O.B.O.T.I.C.S.",
-"city": "Holland",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 108,
-"nickname": "SigmaC@T Robotics Team",
-"city": "Fort Lauderdale",
-"state_prov": "Florida",
-"country": "USA"
-},
-{
-"team_number": 111,
-"nickname": "WildStang",
-"city": "Arlington Heights",
-"state_prov": "Illinois",
-"country": "USA"
-},
-{
-"team_number": 112,
-"nickname": "Plus One",
-"city": "Arlington Heights",
-"state_prov": "Illinois",
-"country": "USA"
-},
-{
-"team_number": 114,
-"nickname": "Eaglestrike",
-"city": "Los Altos",
-"state_prov": "California",
-"country": "USA"
-},
-{
 "team_number": 115,
 "nickname": "MVRT",
 "city": "Cupertino",
@@ -88,13 +39,6 @@
 "nickname": "NASA Knights",
 "city": "Hampton",
 "state_prov": "Virginia",
-"country": "USA"
-},
-{
-"team_number": 123,
-"nickname": "Team - Cosmos",
-"city": "Hamtramck",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -144,13 +88,6 @@
 "nickname": "Entropy",
 "city": "Amherst",
 "state_prov": "New Hampshire",
-"country": "USA"
-},
-{
-"team_number": 141,
-"nickname": "WOBOT",
-"city": "Holland",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -329,13 +266,6 @@
 "country": "USA"
 },
 {
-"team_number": 201,
-"nickname": "The FEDS",
-"city": "Rochester",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 203,
 "nickname": "SOUPERBOTS",
 "city": "Sicklerville",
@@ -347,13 +277,6 @@
 "nickname": "Eastern Robotic Vikings",
 "city": "Voorhees",
 "state_prov": "New Jersey",
-"country": "USA"
-},
-{
-"team_number": 217,
-"nickname": "ThunderChickens",
-"city": "Sterling Heights",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -375,13 +298,6 @@
 "nickname": "Xtreme Heat",
 "city": "Wanaque",
 "state_prov": "New Jersey",
-"country": "USA"
-},
-{
-"team_number": 226,
-"nickname": "Hammerheads",
-"city": "Troy",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -448,38 +364,10 @@
 "country": "USA"
 },
 {
-"team_number": 240,
-"nickname": "TEMPEST",
-"city": "Newport",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 244,
-"nickname": "RoboDawgs 3D",
-"city": "Grandville",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 245,
-"nickname": "Adambots",
-"city": "Rochester Hills",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 246,
 "nickname": "Lobstah Bots",
 "city": "Boston",
 "state_prov": "Massachusetts",
-"country": "USA"
-},
-{
-"team_number": 247,
-"nickname": "Da Bears",
-"city": "Berkley",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -539,13 +427,6 @@
 "country": "USA"
 },
 {
-"team_number": 288,
-"nickname": "The RoboDawgs",
-"city": "Grandville",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 291,
 "nickname": "CIA - Creativity In Action",
 "city": "Erie",
@@ -581,31 +462,10 @@
 "country": "Canada"
 },
 {
-"team_number": 302,
-"nickname": "The Dragons",
-"city": "Lake Orion",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 303,
 "nickname": "The T.E.S.T. Team",
 "city": "Bridgewater",
 "state_prov": "New Jersey",
-"country": "USA"
-},
-{
-"team_number": 308,
-"nickname": "Monsters",
-"city": "Walled Lake",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 314,
-"nickname": "The Megatron Oracles",
-"city": "Flint",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -945,13 +805,6 @@
 "country": "USA"
 },
 {
-"team_number": 453,
-"nickname": "Rockem Sockem Robotics",
-"city": "Clinton Township",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 456,
 "nickname": "Siege Robotics",
 "city": "Vicksburg",
@@ -977,13 +830,6 @@
 "nickname": "Center of Mass",
 "city": "Shrewsbury",
 "state_prov": "Massachusetts",
-"country": "USA"
-},
-{
-"team_number": 469,
-"nickname": "Las Guerrillas",
-"city": "Pontiac",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -1015,13 +861,6 @@
 "country": "USA"
 },
 {
-"team_number": 494,
-"nickname": "Martians",
-"city": "Goodrich",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 496,
 "nickname": "Royals",
 "city": "Port Jefferson",
@@ -1040,13 +879,6 @@
 "nickname": "The PowerKnights",
 "city": "Manchester/Goffstown",
 "state_prov": "New Hampshire",
-"country": "USA"
-},
-{
-"team_number": 503,
-"nickname": "Frog Force",
-"city": "Novi",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -1141,13 +973,6 @@
 "country": "USA"
 },
 {
-"team_number": 548,
-"nickname": "Robostangs",
-"city": "Northville",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 554,
 "nickname": "The Blue Grease Crew",
 "city": "Ft. Thomas",
@@ -1187,13 +1012,6 @@
 "nickname": "Paragon Robotics",
 "city": "Windsor",
 "state_prov": "Connecticut",
-"country": "USA"
-},
-{
-"team_number": 573,
-"nickname": "Mech Warriors",
-"city": "Bloomfield Hills",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -1603,13 +1421,6 @@
 "country": "USA"
 },
 {
-"team_number": 815,
-"nickname": "Advanced Power",
-"city": "Allen Park",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 816,
 "nickname": "Anomaly",
 "city": "Mount Holly",
@@ -1617,24 +1428,10 @@
 "country": "USA"
 },
 {
-"team_number": 818,
-"nickname": "The Steel Armadillos",
-"city": "Warren",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 829,
 "nickname": "The Digital Goats",
 "city": "Indianapolis",
 "state_prov": "Indiana",
-"country": "USA"
-},
-{
-"team_number": 830,
-"nickname": "The RatPack",
-"city": "Ann Arbor",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -1708,27 +1505,6 @@
 "country": "Canada"
 },
 {
-"team_number": 857,
-"nickname": "Superior Roboworks",
-"city": "Houghton",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 858,
-"nickname": "Demons Robotics",
-"city": "Wyoming",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 862,
-"nickname": "Lightning Robotics",
-"city": "Canton",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 865,
 "nickname": "WARP7",
 "city": "Toronto",
@@ -1792,31 +1568,10 @@
 "country": "USA"
 },
 {
-"team_number": 894,
-"nickname": "The Power Chargers",
-"city": "Flint",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 900,
 "nickname": "The Zebracorns",
 "city": "Durham",
 "state_prov": "North Carolina",
-"country": "USA"
-},
-{
-"team_number": 904,
-"nickname": "D Cubed",
-"city": "Grand Rapids",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 910,
-"nickname": "The Foley Freeze",
-"city": "Madison Heights",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -2002,24 +1757,10 @@
 "country": "USA"
 },
 {
-"team_number": 1023,
-"nickname": "Bedford Express",
-"city": "Temperance",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 1024,
 "nickname": "Kil-A-Bytes",
 "city": "Indianapolis",
 "state_prov": "Indiana",
-"country": "USA"
-},
-{
-"team_number": 1025,
-"nickname": "Impi Warriors",
-"city": "Ferndale",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -2076,13 +1817,6 @@
 "nickname": "The Force Team",
 "city": "Hollis",
 "state_prov": "New Hampshire",
-"country": "USA"
-},
-{
-"team_number": 1076,
-"nickname": "PiHi Samurai",
-"city": "Ann Arbor",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -2240,20 +1974,6 @@
 "country": "USA"
 },
 {
-"team_number": 1188,
-"nickname": "The Ravens",
-"city": "Royal Oak",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 1189,
-"nickname": "Gearheads",
-"city": "Grosse Pointe",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 1197,
 "nickname": "TorBots",
 "city": "Torrance",
@@ -2321,13 +2041,6 @@
 "nickname": "Blood, Sweat, and Gears",
 "city": "North Sutton",
 "state_prov": "New Hampshire",
-"country": "USA"
-},
-{
-"team_number": 1250,
-"nickname": "Gator-Bots",
-"city": "Dearborn",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -2482,13 +2195,6 @@
 "nickname": "Flash",
 "city": "Mauldin",
 "state_prov": "South Carolina",
-"country": "USA"
-},
-{
-"team_number": 1322,
-"nickname": "GRAYT Leviathons (Genesee Robotics Area Youth Team)",
-"city": "Fenton",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -2695,13 +2401,6 @@
 "country": "USA"
 },
 {
-"team_number": 1481,
-"nickname": "The Riveters",
-"city": "Farmington Hills",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 1493,
 "nickname": "Falcons",
 "city": "Albany",
@@ -2709,38 +2408,10 @@
 "country": "USA"
 },
 {
-"team_number": 1498,
-"nickname": "The Polar Pilots",
-"city": "Richmond",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 1501,
 "nickname": "Team THRUST",
 "city": "Huntington",
 "state_prov": "Indiana",
-"country": "USA"
-},
-{
-"team_number": 1502,
-"nickname": "Technical Difficulties",
-"city": "Chelsea",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 1504,
-"nickname": "Desperate Penguins",
-"city": "Okemos",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 1506,
-"nickname": "Metal Muscle",
-"city": "Flint",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -2790,13 +2461,6 @@
 "nickname": "MARS (Mega Awesome Robotic Systems)",
 "city": "Jupiter",
 "state_prov": "Florida",
-"country": "USA"
-},
-{
-"team_number": 1528,
-"nickname": "MTR (Monroe Trojan Robotics)",
-"city": "Monroe",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -2933,13 +2597,6 @@
 "country": "USA"
 },
 {
-"team_number": 1596,
-"nickname": "The Instigators",
-"city": "Sault Sainte Marie",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 1599,
 "nickname": "CircuiTree",
 "city": "Mechanicsville",
@@ -3073,13 +2730,6 @@
 "country": "USA"
 },
 {
-"team_number": 1684,
-"nickname": "The Chimeras",
-"city": "Lapeer",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 1690,
 "nickname": "Orbit",
 "city": "Binyamina",
@@ -3098,13 +2748,6 @@
 "nickname": "Gatorbotics",
 "city": "Palo Alto",
 "state_prov": "California",
-"country": "USA"
-},
-{
-"team_number": 1701,
-"nickname": "Robocubs",
-"city": "Detroit",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -3129,13 +2772,6 @@
 "country": "USA"
 },
 {
-"team_number": 1711,
-"nickname": "RAPTORS",
-"city": "Traverse City",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 1712,
 "nickname": "Dawgma",
 "city": "Ardmore",
@@ -3154,13 +2790,6 @@
 "nickname": "Redbird Robotics",
 "city": "De Pere",
 "state_prov": "Wisconsin",
-"country": "USA"
-},
-{
-"team_number": 1718,
-"nickname": "The Fighting Pi",
-"city": "Armada",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -3661,13 +3290,6 @@
 "country": "USA"
 },
 {
-"team_number": 1918,
-"nickname": "Newaygo County GEARS",
-"city": "Fremont",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 1922,
 "nickname": "Oz-Ram",
 "city": "Contoocook",
@@ -3700,13 +3322,6 @@
 "nickname": "THE KUHNIGHTS",
 "city": "Kansas City",
 "state_prov": "Missouri",
-"country": "USA"
-},
-{
-"team_number": 1940,
-"nickname": "Tech Tigers 1940",
-"city": "Benton Harbor",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -3885,13 +3500,6 @@
 "country": "USA"
 },
 {
-"team_number": 2048,
-"nickname": "The Pink Panthers",
-"city": "Detroit",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 2052,
 "nickname": "KnightKrawler",
 "city": "New Brighton",
@@ -3903,13 +3511,6 @@
 "nickname": "Southern Tier Robotics",
 "city": "Vestal",
 "state_prov": "New York",
-"country": "USA"
-},
-{
-"team_number": 2054,
-"nickname": "Tech Vikes",
-"city": "Hopkins",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -3959,13 +3560,6 @@
 "nickname": "EagleForce",
 "city": "Elk Grove",
 "state_prov": "California",
-"country": "USA"
-},
-{
-"team_number": 2075,
-"nickname": "Enigma Robotics",
-"city": "Grand Rapids",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -4060,13 +3654,6 @@
 "country": "USA"
 },
 {
-"team_number": 2137,
-"nickname": "The Oxford RoboCats",
-"city": "Oxford",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 2141,
 "nickname": "Spartronics",
 "city": "Concord",
@@ -4078,13 +3665,6 @@
 "nickname": "Team Tobor",
 "city": "Eau Claire",
 "state_prov": "Wisconsin",
-"country": "USA"
-},
-{
-"team_number": 2145,
-"nickname": "HAZMATS",
-"city": "Linden",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -4284,13 +3864,6 @@
 "country": "USA"
 },
 {
-"team_number": 2224,
-"nickname": "RoboPhoenix",
-"city": "Detroit",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 2225,
 "nickname": "Rebel Robotics",
 "city": "Champlin",
@@ -4414,13 +3987,6 @@
 "nickname": "Sapulpa Robotics Team",
 "city": "Sapulpa",
 "state_prov": "Oklahoma",
-"country": "USA"
-},
-{
-"team_number": 2337,
-"nickname": "EngiNERDs",
-"city": "Grand Blanc",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -4596,13 +4162,6 @@
 "nickname": "Team NEY Techs (TNT)",
 "city": "Pasadena",
 "state_prov": "California",
-"country": "USA"
-},
-{
-"team_number": 2405,
-"nickname": "Techno Trojans",
-"city": "Fruitport",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -5061,13 +4620,6 @@
 "country": "USA"
 },
 {
-"team_number": 2586,
-"nickname": "Copper Bots",
-"city": "Calumet",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 2587,
 "nickname": "DiscoBots",
 "city": "Houston",
@@ -5079,13 +4631,6 @@
 "nickname": "Nemesis",
 "city": "Robbinsville",
 "state_prov": "New Jersey",
-"country": "USA"
-},
-{
-"team_number": 2591,
-"nickname": "RedTails",
-"city": "Detroit",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -5110,13 +4655,6 @@
 "country": "USA"
 },
 {
-"team_number": 2604,
-"nickname": "Metal and Soul",
-"city": "Capac",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 2606,
 "nickname": "Irish Robotics",
 "city": "Rosemount",
@@ -5138,31 +4676,10 @@
 "country": "Canada"
 },
 {
-"team_number": 2611,
-"nickname": "Jacktown Vectors",
-"city": "Jackson",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 2614,
 "nickname": "Mountaineer Area RoboticS (MARS)",
 "city": "Morgantown",
 "state_prov": "West Virginia",
-"country": "USA"
-},
-{
-"team_number": 2619,
-"nickname": "The Charge",
-"city": "Midland",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 2620,
-"nickname": "Titans",
-"city": "Southgate",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -5282,13 +4799,6 @@
 "nickname": "Knights of the Valley",
 "city": "Apple Valley",
 "state_prov": "Minnesota",
-"country": "USA"
-},
-{
-"team_number": 2673,
-"nickname": "Tenacious Technicians",
-"city": "Detroit",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -5425,20 +4935,6 @@
 "country": "USA"
 },
 {
-"team_number": 2767,
-"nickname": "Stryke Force",
-"city": "Kalamazoo",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 2771,
-"nickname": "Code Red Robotics the Stray Dogs",
-"city": "Grandville",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 2773,
 "nickname": "IronDogz",
 "city": "Edmond",
@@ -5530,20 +5026,6 @@
 "country": "USA"
 },
 {
-"team_number": 2832,
-"nickname": "The Livonia Warriors",
-"city": "Livonia",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 2834,
-"nickname": "Bionic Black Hawks",
-"city": "Bloomfield Hills",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 2839,
 "nickname": "Daedalus",
 "city": "Escondido",
@@ -5583,13 +5065,6 @@
 "nickname": "Ursa Major",
 "city": "Columbia",
 "state_prov": "Maryland",
-"country": "USA"
-},
-{
-"team_number": 2851,
-"nickname": "Crevolution",
-"city": "Sterling Heights",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -5828,20 +5303,6 @@
 "nickname": "Devastators",
 "city": "Waco",
 "state_prov": "Texas",
-"country": "USA"
-},
-{
-"team_number": 2959,
-"nickname": "Robotarians",
-"city": "Coloma",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 2960,
-"nickname": "Automation Nation",
-"city": "Birmingham",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -6195,20 +5656,6 @@
 "country": "USA"
 },
 {
-"team_number": 3096,
-"nickname": "The Village Bulldogs",
-"city": "Detroit",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 3098,
-"nickname": "Waterford Robotics",
-"city": "Waterford",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 3100,
 "nickname": "The Lightning Turtles",
 "city": "Mendota Heights",
@@ -6363,13 +5810,6 @@
 "country": "USA"
 },
 {
-"team_number": 3175,
-"nickname": "Knight Vision",
-"city": "Grosse Pointe Woods",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 3176,
 "nickname": "Purple Precision",
 "city": "Brownsburg",
@@ -6507,13 +5947,6 @@
 "nickname": "Hawktimus Prime",
 "city": "Holly Springs",
 "state_prov": "North Carolina",
-"country": "USA"
-},
-{
-"team_number": 3234,
-"nickname": "Red Arrows",
-"city": "Lowell",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -6699,13 +6132,6 @@
 "country": "USA"
 },
 {
-"team_number": 3302,
-"nickname": "TurboTrojans",
-"city": "Clawson",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 3309,
 "nickname": "Friarbots",
 "city": "Anaheim",
@@ -6745,13 +6171,6 @@
 "nickname": "RoboDragons",
 "city": "Lawrenceville",
 "state_prov": "Georgia",
-"country": "USA"
-},
-{
-"team_number": 3322,
-"nickname": "Eagle Evolution",
-"city": "Ann Arbor",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -6823,13 +6242,6 @@
 "city": "Queretaro",
 "state_prov": "Querétaro",
 "country": "Mexico"
-},
-{
-"team_number": 3357,
-"nickname": "COMETS",
-"city": "Grand Rapids",
-"state_prov": "Michigan",
-"country": "USA"
 },
 {
 "team_number": 3359,
@@ -6909,13 +6321,6 @@
 "country": "USA"
 },
 {
-"team_number": 3414,
-"nickname": "Hackbots",
-"city": "Farmington",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 3418,
 "nickname": "RoboRiot",
 "city": "Sheboygan Falls",
@@ -6937,20 +6342,6 @@
 "country": "USA"
 },
 {
-"team_number": 3425,
-"nickname": "PULSARS",
-"city": "Grand Rapids",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 3452,
-"nickname": "GreengineerZ",
-"city": "Berrien Springs",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 3454,
 "nickname": "Z Bots",
 "city": "Saint Paul",
@@ -6962,13 +6353,6 @@
 "nickname": "Robot Revolution",
 "city": "Alexandria",
 "state_prov": "Virginia",
-"country": "USA"
-},
-{
-"team_number": 3458,
-"nickname": "Code Blue",
-"city": "Holland",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -7182,34 +6566,6 @@
 "country": "Canada"
 },
 {
-"team_number": 3536,
-"nickname": "Electro Eagles",
-"city": "Hartland",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 3537,
-"nickname": "Delta Force",
-"city": "Indian River",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 3538,
-"nickname": "RoboJackets",
-"city": "Auburn Hills",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 3539,
-"nickname": "Byting Bulldogs",
-"city": "Romeo",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 3543,
 "nickname": "C4 Robotics",
 "city": "Arnprior",
@@ -7266,20 +6622,6 @@
 "country": "USA"
 },
 {
-"team_number": 3568,
-"nickname": "Linden RoboEagles",
-"city": "Linden",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 3572,
-"nickname": "Wavelength",
-"city": "Muskegon",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 3574,
 "nickname": "HIGH TEKERZ",
 "city": "Burien",
@@ -7315,27 +6657,6 @@
 "country": "USA"
 },
 {
-"team_number": 3602,
-"nickname": "RoboMos",
-"city": "Escanaba",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 3603,
-"nickname": "Cyber Coyotes",
-"city": "Reed City",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 3604,
-"nickname": "Goon Squad",
-"city": "Brownstown",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 3606,
 "nickname": "BearMetal",
 "city": "Baton Rouge",
@@ -7354,27 +6675,6 @@
 "nickname": "Team Phenomena",
 "city": "Lafayette",
 "state_prov": "Louisiana",
-"country": "USA"
-},
-{
-"team_number": 3618,
-"nickname": "Petoskey Paladins",
-"city": "Petoskey",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 3619,
-"nickname": "BLACKHAWKS",
-"city": "Detroit",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 3620,
-"nickname": "Average Joes",
-"city": "Saint Joseph",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -7406,13 +6706,6 @@
 "country": "USA"
 },
 {
-"team_number": 3632,
-"nickname": "D-Techs",
-"city": "Detroit",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 3634,
 "nickname": "Bridgeport Spark City",
 "city": "Bridgeport",
@@ -7441,13 +6734,6 @@
 "country": "USA"
 },
 {
-"team_number": 3641,
-"nickname": "The Flying Toasters",
-"city": "South Lyon",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
 "team_number": 3646,
 "nickname": "INTEGRA BAHCESEHIR",
 "city": "istanbul",
@@ -7473,13 +6759,6 @@
 "nickname": "TechTigers",
 "city": "Middletown",
 "state_prov": "Connecticut",
-"country": "USA"
-},
-{
-"team_number": 3655,
-"nickname": "Tractor Technicians",
-"city": "Mason",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
@@ -8949,13 +8228,6 @@
 "team_number": 4325,
 "nickname": "RoboRangers",
 "city": "Cassopolis",
-"state_prov": "Michigan",
-"country": "USA"
-},
-{
-"team_number": 4327,
-"nickname": "Q Branch",
-"city": "Battle Creek",
 "state_prov": "Michigan",
 "country": "USA"
 },
@@ -14154,13 +13426,6 @@
 "country": "China"
 },
 {
-"team_number": 6488,
-"nickname": "RoboRams",
-"city": "Houston",
-"state_prov": "Texas",
-"country": "USA"
-},
-{
 "team_number": 6489,
 "nickname": "Bronco Bolts",
 "city": "Zachary",
@@ -15754,13 +15019,6 @@
 "nickname": "Perkins Pirates",
 "city": "Sandusky",
 "state_prov": "Ohio",
-"country": "USA"
-},
-{
-"team_number": 7166,
-"nickname": "Red Thunder Robotics",
-"city": "Laingsburg",
-"state_prov": "Michigan",
 "country": "USA"
 },
 {
